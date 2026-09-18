@@ -1,7 +1,15 @@
 package com.maxime.hardwarelab.item;
 
+import com.maxime.hardwarelab.block.BusMuxBlock;
+import com.maxime.hardwarelab.block.BusOutputBlock;
+import com.maxime.hardwarelab.block.BusSplitterBlock;
+import com.maxime.hardwarelab.block.DigitalBusBlock;
 import com.maxime.hardwarelab.block.DigitalWireBlock;
 import com.maxime.hardwarelab.block.UniversalLogicGateBlock;
+import com.maxime.hardwarelab.block.entity.BusMuxBlockEntity;
+import com.maxime.hardwarelab.block.entity.BusSplitterBlockEntity;
+import com.maxime.hardwarelab.block.entity.DigitalBusBlockEntity;
+import com.maxime.hardwarelab.logic.BusSignal;
 import com.maxime.hardwarelab.logic.GateType;
 import com.maxime.hardwarelab.logic.Signal;
 import net.minecraft.core.BlockPos;
@@ -12,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
@@ -43,6 +52,17 @@ public final class LogicProbeItem extends Item {
 
         if (state.getBlock() instanceof DigitalWireBlock) {
             showWire(player, state);
+            return InteractionResult.SUCCESS;
+        }
+
+        if (state.getBlock() instanceof DigitalBusBlock
+                || state.getBlock() instanceof BusMuxBlock) {
+            showBus(player, level, pos, state);
+            return InteractionResult.SUCCESS;
+        }
+
+        if (state.getBlock() instanceof BusSplitterBlock) {
+            showSplitter(player, level, pos);
             return InteractionResult.SUCCESS;
         }
 
@@ -86,6 +106,51 @@ public final class LogicProbeItem extends Item {
                         + " | STATE=" + (state.getValue(DigitalWireBlock.POWERED) ? "HIGH" : "LOW")
                         + " | CONNECTIONS=" + (connections.length() == 0 ? "-" : connections)
         ));
+    }
+
+    private static void showBus(
+            Player player,
+            Level level,
+            BlockPos pos,
+            BlockState state
+    ) {
+        BusOutputBlock output = (BusOutputBlock) state.getBlock();
+        BusSignal signal = output.getBusOutput(level, pos, state);
+
+        player.sendOverlayMessage(Component.literal(
+                "PROBE | BUS"
+                        + " | WIDTH=" + signal.width().bits()
+                        + " | VALUE=0x" + signal.hex()
+                        + " | BIN=" + signal.binary()
+        ));
+    }
+
+    private static void showSplitter(Player player, Level level, BlockPos pos) {
+        BlockEntity raw = level.getBlockEntity(pos);
+        if (!(raw instanceof BusSplitterBlockEntity entity)) {
+            return;
+        }
+
+        BusSignal input = getSplitterInput(level, pos);
+        String value = input == null ? "NO BUS" : "0x" + input.hex();
+
+        player.sendOverlayMessage(Component.literal(
+                "PROBE | BUS SPLITTER"
+                        + " | WIDTH=" + entity.width().bits()
+                        + " | BANK=" + entity.bank()
+                        + " | BITS=" + entity.firstBit() + "-" + (entity.firstBit() + 3)
+                        + " | INPUT=" + value
+        ));
+    }
+
+    private static BusSignal getSplitterInput(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        Direction facing = state.getValue(BusSplitterBlock.FACING);
+        return com.maxime.hardwarelab.block.BusNetwork.readOutput(
+                level,
+                pos.relative(facing.getOpposite()),
+                facing
+        );
     }
 
     private static void appendConnection(
