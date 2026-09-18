@@ -91,11 +91,10 @@ public final class CpuBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        ticksPerInstruction = switch (input.getIntOr("ticksPerInstruction", 2)) {
-            case 1, 2, 4 -> input.getIntOr("ticksPerInstruction", 2);
-            default -> 2;
-        };
+        int loadedSpeed = input.getIntOr("ticksPerInstruction", 2);
+        ticksPerInstruction = loadedSpeed == 1 || loadedSpeed == 2 || loadedSpeed == 4 ? loadedSpeed : 2;
         tickCounter = input.getIntOr("tickCounter", 0);
+
         cpu.loadProgram(Math.floorMod(input.getIntOr("programId", 0), 4));
         cpu.restore(
                 input.getIntOr("a", 0),
