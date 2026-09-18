@@ -38,7 +38,7 @@ The original roadmap is implemented as a playable baseline. The blocks use Minec
 
 Press **H** at any time in a world to open the Hardware Lab Guide.
 
-The guide is split into three pages and uses plain-language descriptions of every component. Use **Left / Right** to change pages and **Esc** to close it.
+The guide starts with a concrete example circuit, then explains logic/timing, buses/memory/CPU and the two diagnostic tools. Use **Left / Right** to change pages and **Esc** to close it. The **Settings** button in the guide switches Hardware Lab between English and Russian and saves the choice in the mod config.
 
 Hold the **Logic Probe** and right-click a Hardware Lab component to open a component information panel. The server-side probe readout also reports the current value/state.
 
@@ -46,7 +46,15 @@ Hold the **Oscilloscope** and right-click a signal source to open the live wavef
 
 Every Hardware Lab block and tool has an expanded inventory tooltip describing its purpose and controls.
 
-The blocks now use distinct industrial-looking materials and marked front faces instead of reusing the same redstone-block texture everywhere. Directional blocks rotate their front face with their FACING state, making the input/output side easier to spot.
+The blocks use custom 16x16 pixel-art textures with separate visual families for logic, I/O, clocking, buses, memory, compute and displays. Digital Wire has distinct LOW/HIGH textures, a connection-aware cross/vertical collision shape and automatic network propagation. Directional blocks rotate their marked front face with their FACING state, making ports easier to read.
+
+### Signal conventions
+
+**Digital Wire** carries one binary bit and connects automatically to adjacent 1-bit signal blocks. It is not a bus cable.
+
+**Digital Bus** is the multi-bit path: 4 / 8 / 16 / 32 bits. Bus-capable blocks expose their bus ports by physical side and do not use Digital Wire for the packed bus itself.
+
+A green/light wire means HIGH; a dark wire means LOW. Use **Logic Probe** for a live readout and **Oscilloscope** for the signal over time.
 
 ## Roadmap
 
