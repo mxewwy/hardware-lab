@@ -215,7 +215,7 @@ public final class HardwareLabLanguage {
 
     private static void load() {
         try {
-            if (Files.exists(CONFIG) && Files.readString(CONFIG).contains(""language":"ru"")) {
+            if (Files.exists(CONFIG) && Files.readString(CONFIG).replaceAll("\\s", "").contains("\"language\":\"ru\"")) {
                 language = Language.RUSSIAN;
             }
         } catch (IOException ignored) {}
@@ -224,10 +224,10 @@ public final class HardwareLabLanguage {
     private static void save() {
         try {
             Files.createDirectories(CONFIG.getParent());
-            Files.writeString(CONFIG, "{
-  "language": "" + (language == Language.RUSSIAN ? "ru" : "en") + ""
-}
-");
+            Files.writeString(
+                    CONFIG,
+                    "{\n  \"language\": \"" + (language == Language.RUSSIAN ? "ru" : "en") + "\"\n}\n"
+            );
         } catch (IOException ignored) {}
     }
 }
