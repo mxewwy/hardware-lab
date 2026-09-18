@@ -3,6 +3,7 @@ package com.maxime.hardwarelab.block;
 import com.maxime.hardwarelab.block.entity.DigitalBusBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.BusSignal;
+import com.maxime.hardwarelab.logic.BusWidth;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -89,7 +90,7 @@ public class DigitalBusBlock extends BaseEntityBlock implements BusOutputBlock {
     public BusSignal getBusOutput(BlockGetter level, BlockPos pos, BlockState state) {
         DigitalBusBlockEntity entity = getEntity(level, pos);
         if (entity == null) {
-            return BusSignal.zero(com.maxime.hardwarelab.logic.BusWidth.BITS_8);
+            return BusSignal.zero(BusWidth.BITS_8);
         }
 
         Direction facing = state.getValue(FACING);
@@ -104,6 +105,11 @@ public class DigitalBusBlock extends BaseEntityBlock implements BusOutputBlock {
         }
 
         return entity.manualSignal();
+    }
+
+    @Override
+    public Direction getBusOutputDirection(BlockState state) {
+        return state.getValue(FACING);
     }
 
     @Override
