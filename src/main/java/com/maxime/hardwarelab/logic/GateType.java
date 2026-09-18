@@ -1,6 +1,8 @@
 package com.maxime.hardwarelab.logic;
 
-public enum GateType {
+import net.minecraft.util.StringRepresentable;
+
+public enum GateType implements StringRepresentable {
     AND("AND", LogicFunctions.AND),
     OR("OR", LogicFunctions.OR),
     XOR("XOR", LogicFunctions.XOR),
@@ -24,5 +26,15 @@ public enum GateType {
 
     public LogicFunction function() {
         return function;
+    }
+
+    public GateType next() {
+        GateType[] values = values();
+        return values[(ordinal() + 1) % values.length];
+    }
+
+    @Override
+    public String getSerializedName() {
+        return name().toLowerCase();
     }
 }
