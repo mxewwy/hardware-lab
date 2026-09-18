@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "hardware_lab:block/dac" },
+    "facing=east": { "model": "hardware_lab:block/dac", "y": 90 },
+    "facing=south": { "model": "hardware_lab:block/dac", "y": 180 },
+    "facing=west": { "model": "hardware_lab:block/dac", "y": 270 }
+  }
+}
