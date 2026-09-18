@@ -4,6 +4,7 @@ import com.maxime.hardwarelab.block.entity.BusMuxBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.BusMuxLogic;
 import com.maxime.hardwarelab.logic.BusSignal;
+import com.maxime.hardwarelab.logic.BusWidth;
 import com.maxime.hardwarelab.logic.Signal;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -100,7 +101,7 @@ public class BusMuxBlock extends BaseEntityBlock implements BusOutputBlock {
     public BusSignal getBusOutput(BlockGetter level, BlockPos pos, BlockState state) {
         BusMuxBlockEntity entity = getEntity(level, pos);
         if (entity == null) {
-            return BusSignal.zero(com.maxime.hardwarelab.logic.BusWidth.BITS_8);
+            return BusSignal.zero(BusWidth.BITS_8);
         }
 
         Direction facing = state.getValue(FACING);
@@ -117,8 +118,11 @@ public class BusMuxBlock extends BaseEntityBlock implements BusOutputBlock {
                 right
         );
 
-        boolean selectHigh = level.getSignal(
-                pos.relative(right),
+        BlockPos selectPos = pos.relative(right);
+        BlockState selectState = level.getBlockState(selectPos);
+        boolean selectHigh = selectState.getSignal(
+                level,
+                selectPos,
                 right.getOpposite()
         ) > 0;
 
