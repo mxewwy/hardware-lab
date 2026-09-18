@@ -17,8 +17,10 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.StateDefinition;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
 public final class CpuBlock extends BaseEntityBlock implements BusOutputBlock {
@@ -52,10 +54,10 @@ public final class CpuBlock extends BaseEntityBlock implements BusOutputBlock {
     }
 
     @Override
-    public <T extends BlockEntity> net.minecraft.world.level.block.entity.BlockEntityTicker<T> getTicker(
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
             Level level,
             BlockState state,
-            net.minecraft.world.level.block.entity.BlockEntityType<T> type
+            BlockEntityType<T> type
     ) {
         return createTickerHelper(type, ModBlockEntities.CPU, CpuBlockEntity::tick);
     }
@@ -78,8 +80,6 @@ public final class CpuBlock extends BaseEntityBlock implements BusOutputBlock {
         }
 
         if (player.isShiftKeyDown()) {
-            entity.reset();
-        } else if (player.isCrouching()) {
             entity.cycleSpeed();
         } else {
             entity.cycleProgram();
