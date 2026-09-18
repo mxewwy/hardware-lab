@@ -1,0 +1,19 @@
+{
+  "textures": {
+    "texture": "hardware_lab:block/digital_wire_on"
+  },
+  "elements": [
+    {
+      "from": [6, 0, 6],
+      "to": [10, 14, 10],
+      "faces": {
+        "down": {"texture": "#texture"},
+        "up": {"texture": "#texture"},
+        "north": {"texture": "#texture"},
+        "south": {"texture": "#texture"},
+        "west": {"texture": "#texture"},
+        "east": {"texture": "#texture"}
+      }
+    }
+  ]
+}
