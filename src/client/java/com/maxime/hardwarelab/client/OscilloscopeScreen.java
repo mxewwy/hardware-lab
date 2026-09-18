@@ -41,7 +41,7 @@ public final class OscilloscopeScreen extends Screen {
         }
 
         BlockState state = level.getBlockState(this.targetPos);
-        this.currentSignal = state.getSignal(level, this.targetPos, this.targetFace);
+        this.currentSignal = readSignal(level, state);
 
         this.samples[this.sampleIndex] = this.currentSignal > 0;
         this.sampleIndex = (this.sampleIndex + 1) % SAMPLE_COUNT;
