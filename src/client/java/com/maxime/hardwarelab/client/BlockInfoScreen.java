@@ -69,25 +69,6 @@ public final class BlockInfoScreen extends Screen {
         graphics.fill(left + 18, top + 198, right - 18, top + 200, 0xFF2C343D);
         graphics.text(font, HardwareLabLanguage.text("gui.info.hint"), left + 18, top + 216, 0xFFB9C2CC, false);
 
-        if (path.equals("digital_wire")) {
-            Level level = minecraft.level;
-            if (level != null) {
-                BlockState state = level.getBlockState(targetPos);
-                StringBuilder connections = new StringBuilder();
-                addConnection(connections, state, "N", DigitalWireBlock.NORTH);
-                addConnection(connections, state, "E", DigitalWireBlock.EAST);
-                addConnection(connections, state, "S", DigitalWireBlock.SOUTH);
-                addConnection(connections, state, "W", DigitalWireBlock.WEST);
-                addConnection(connections, state, "U", DigitalWireBlock.UP);
-                addConnection(connections, state, "D", DigitalWireBlock.DOWN);
-                graphics.text(font, "CONNECTIONS  " + (connections.isEmpty() ? "-" : connections),
-                        left + 18, top + 214, 0xFF8F9AA5, false);
-                graphics.text(font,
-                        "WIRE STATE  " + (state.getValue(DigitalWireBlock.POWERED) ? "HIGH" : "LOW"),
-                        left + 18, top + 231,
-                        state.getValue(DigitalWireBlock.POWERED) ? 0xFF4DE38B : 0xFF8A949F, true);
-            }
-        }
 
         graphics.text(font, HardwareLabLanguage.text("gui.info.guide"), left + 18, bottom - 18, 0xFF7F8B96, false);
         graphics.text(font, HardwareLabLanguage.text("gui.info.close"), right - 86, bottom - 18, 0xFF7F8B96, false);
@@ -106,7 +87,7 @@ public final class BlockInfoScreen extends Screen {
             addConnection(links, state, "W", DigitalWireBlock.WEST);
             addConnection(links, state, "U", DigitalWireBlock.UP);
             addConnection(links, state, "D", DigitalWireBlock.DOWN);
-            return "WIRE=" + (wire == null ? "LOW" : (state.getValue(DigitalWireBlock.POWERED) ? "HIGH" : "LOW"))
+            return "WIRE=" + (state.getValue(DigitalWireBlock.POWERED) ? "HIGH" : "LOW")
                     + "  LINKS=" + (links.isEmpty() ? "-" : links);
         }
 
