@@ -1,6 +1,6 @@
 package com.maxime.hardwarelab.block;
 
-import com.maxime.hardwarelab.block.entity.DigitalBusBlockEntity;
+import com.maxime.hardwarelab.block.entity.CpuBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.BusSignal;
 import com.maxime.hardwarelab.logic.BusWidth;
@@ -17,16 +17,18 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class DigitalBusBlock extends BaseEntityBlock implements BusOutputBlock {
-    public static final MapCodec<DigitalBusBlock> CODEC = simpleCodec(DigitalBusBlock::new);
+public final class CpuBlock extends BaseEntityBlock implements BusOutputBlock {
+    public static final MapCodec<CpuBlock> CODEC = simpleCodec(CpuBlock::new);
     public static final net.minecraft.world.level.block.state.properties.EnumProperty<Direction> FACING =
             HorizontalDirectionalBlock.FACING;
 
-    public DigitalBusBlock(Properties properties) {
+    public CpuBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
     }
@@ -43,15 +45,21 @@ public class DigitalBusBlock extends BaseEntityBlock implements BusOutputBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(
-                FACING,
-                context.getHorizontalDirection().getOpposite()
-        );
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new DigitalBusBlockEntity(pos, state);
+        return new CpuBlockEntity(pos, state);
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level,
+            BlockState state,
+            BlockEntityType<T> type
+    ) {
+        return createTickerHelper(type, ModBlockEntities.CPU, CpuBlockEntity::tick);
     }
 
     @Override
@@ -66,45 +74,34 @@ public class DigitalBusBlock extends BaseEntityBlock implements BusOutputBlock {
             return InteractionResult.SUCCESS;
         }
 
-        DigitalBusBlockEntity entity = getEntity(level, pos);
+        CpuBlockEntity entity = getEntity(level, pos);
         if (entity == null) {
             return InteractionResult.PASS;
         }
 
         if (player.isShiftKeyDown()) {
-            entity.cycleWidth();
+            entity.cycleSpeed();
         } else {
-            entity.cycleTestPattern();
+            entity.cycleProgram();
         }
 
         player.sendOverlayMessage(Component.literal(
-                "Digital Bus | WIDTH=" + entity.width().bits()
-                        + " | VALUE=0x" + entity.manualSignal().hex()
+                "8-bit CPU | PROGRAM=" + entity.cpu().programId()
+                        + " | A=0x" + String.format("%02X", entity.cpu().a())
+                        + " | B=0x" + String.format("%02X", entity.cpu().b())
+                        + " | PC=0x" + String.format("%02X", entity.cpu().pc())
+                        + " | OUT=0x" + String.format("%02X", entity.cpu().output())
+                        + " | " + (entity.cpu().halted() ? "HALTED" : "RUN")
+                        + " | " + entity.ticksPerInstruction() + "t/instr"
         ));
         level.updateNeighborsAt(pos, this);
-
         return InteractionResult.SUCCESS;
     }
 
     @Override
     public BusSignal getBusOutput(BlockGetter level, BlockPos pos, BlockState state) {
-        DigitalBusBlockEntity entity = getEntity(level, pos);
-        if (entity == null) {
-            return BusSignal.zero(BusWidth.BITS_8);
-        }
-
-        Direction facing = state.getValue(FACING);
-        BusSignal input = BusNetwork.readOutput(
-                level,
-                pos.relative(facing.getOpposite()),
-                facing
-        );
-
-        if (input != null) {
-            return input.resized(entity.width());
-        }
-
-        return entity.manualSignal();
+        CpuBlockEntity entity = getEntity(level, pos);
+        return entity == null ? BusSignal.zero(BusWidth.BITS_8) : entity.outputSignal();
     }
 
     @Override
@@ -118,32 +115,17 @@ public class DigitalBusBlock extends BaseEntityBlock implements BusOutputBlock {
     }
 
     @Override
-    protected int getSignal(
-            BlockState state,
-            BlockGetter level,
-            BlockPos pos,
-            Direction direction
-    ) {
-        if (direction != state.getValue(FACING)) {
-            return 0;
-        }
-
-        BusSignal output = getBusOutput(level, pos, state);
-        return output.value() == 0 ? 0 : 15;
+    protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        return direction == state.getValue(FACING) && getBusOutput(level, pos, state).value() != 0 ? 15 : 0;
     }
 
     @Override
-    protected int getDirectSignal(
-            BlockState state,
-            BlockGetter level,
-            BlockPos pos,
-            Direction direction
-    ) {
+    protected int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return getSignal(state, level, pos, direction);
     }
 
-    private static DigitalBusBlockEntity getEntity(BlockGetter level, BlockPos pos) {
+    private static CpuBlockEntity getEntity(BlockGetter level, BlockPos pos) {
         BlockEntity entity = level.getBlockEntity(pos);
-        return entity instanceof DigitalBusBlockEntity bus ? bus : null;
+        return entity instanceof CpuBlockEntity cpu ? cpu : null;
     }
 }

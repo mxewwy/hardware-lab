@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "hardware_lab:block/ram_256" },
+    "facing=east": { "model": "hardware_lab:block/ram_256", "y": 90 },
+    "facing=south": { "model": "hardware_lab:block/ram_256", "y": 180 },
+    "facing=west": { "model": "hardware_lab:block/ram_256", "y": 270 }
+  }
+}

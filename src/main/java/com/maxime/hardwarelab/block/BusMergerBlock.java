@@ -1,11 +1,9 @@
 package com.maxime.hardwarelab.block;
 
-import com.maxime.hardwarelab.block.entity.BusMuxBlockEntity;
+import com.maxime.hardwarelab.block.entity.BusMergerBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
-import com.maxime.hardwarelab.logic.BusMuxLogic;
 import com.maxime.hardwarelab.logic.BusSignal;
 import com.maxime.hardwarelab.logic.BusWidth;
-import com.maxime.hardwarelab.logic.Signal;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,12 +21,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class BusMuxBlock extends BaseEntityBlock implements BusOutputBlock {
-    public static final MapCodec<BusMuxBlock> CODEC = simpleCodec(BusMuxBlock::new);
+public final class BusMergerBlock extends BaseEntityBlock implements BusOutputBlock {
+    public static final MapCodec<BusMergerBlock> CODEC = simpleCodec(BusMergerBlock::new);
     public static final net.minecraft.world.level.block.state.properties.EnumProperty<Direction> FACING =
             HorizontalDirectionalBlock.FACING;
 
-    public BusMuxBlock(Properties properties) {
+    public BusMergerBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
     }
@@ -45,15 +43,12 @@ public class BusMuxBlock extends BaseEntityBlock implements BusOutputBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(
-                FACING,
-                context.getHorizontalDirection().getOpposite()
-        );
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new BusMuxBlockEntity(pos, state);
+        return new BusMergerBlockEntity(pos, state);
     }
 
     @Override
@@ -68,18 +63,23 @@ public class BusMuxBlock extends BaseEntityBlock implements BusOutputBlock {
             return InteractionResult.SUCCESS;
         }
 
-        BusMuxBlockEntity entity = getEntity(level, pos);
+        BusMergerBlockEntity entity = getEntity(level, pos);
         if (entity == null) {
             return InteractionResult.PASS;
         }
 
-        entity.cycleWidth();
+        if (player.isShiftKeyDown()) {
+            entity.cycleWidth();
+        } else {
+            entity.cycleBank();
+        }
+
         player.sendOverlayMessage(Component.literal(
-                "Bus MUX | WIDTH=" + entity.width().bits()
-                        + " | SELECT=REDSTONE"
+                "Bus Merger | WIDTH=" + entity.width().bits()
+                        + " | BANK=" + entity.bank()
+                        + " | BITS=" + entity.firstBit() + "-" + (entity.firstBit() + 3)
         ));
         level.updateNeighborsAt(pos, this);
-
         return InteractionResult.SUCCESS;
     }
 
@@ -99,39 +99,19 @@ public class BusMuxBlock extends BaseEntityBlock implements BusOutputBlock {
 
     @Override
     public BusSignal getBusOutput(BlockGetter level, BlockPos pos, BlockState state) {
-        BusMuxBlockEntity entity = getEntity(level, pos);
+        BusMergerBlockEntity entity = getEntity(level, pos);
         if (entity == null) {
             return BusSignal.zero(BusWidth.BITS_8);
         }
 
         Direction facing = state.getValue(FACING);
-        Direction right = facing.getClockWise();
+        int value = 0;
+        value |= read(level, pos.relative(facing.getOpposite()), facing) ? 1 : 0;
+        value |= read(level, pos.relative(facing.getCounterClockWise()), facing.getClockWise()) ? 2 : 0;
+        value |= read(level, pos.relative(facing.getClockWise()), facing.getCounterClockWise()) ? 4 : 0;
+        value |= read(level, pos.above(), Direction.DOWN) ? 8 : 0;
 
-        BusSignal inputA = BusNetwork.readOutput(
-                level,
-                pos.relative(facing.getOpposite()),
-                facing
-        );
-        BusSignal inputB = BusNetwork.readOutput(
-                level,
-                pos.relative(facing.getCounterClockWise()),
-                right
-        );
-
-        BlockPos selectPos = pos.relative(right);
-        BlockState selectState = level.getBlockState(selectPos);
-        boolean selectHigh = selectState.getSignal(
-                level,
-                selectPos,
-                right.getOpposite()
-        ) > 0;
-
-        return BusMuxLogic.select(
-                inputA,
-                inputB,
-                Signal.of(selectHigh),
-                entity.width()
-        );
+        return BusSignal.of(entity.width(), value << entity.firstBit());
     }
 
     @Override
@@ -145,31 +125,22 @@ public class BusMuxBlock extends BaseEntityBlock implements BusOutputBlock {
     }
 
     @Override
-    protected int getSignal(
-            BlockState state,
-            BlockGetter level,
-            BlockPos pos,
-            Direction direction
-    ) {
-        if (direction != state.getValue(FACING)) {
-            return 0;
-        }
-
-        return getBusOutput(level, pos, state).value() == 0 ? 0 : 15;
+    protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        return direction == state.getValue(FACING) && getBusOutput(level, pos, state).value() != 0 ? 15 : 0;
     }
 
     @Override
-    protected int getDirectSignal(
-            BlockState state,
-            BlockGetter level,
-            BlockPos pos,
-            Direction direction
-    ) {
+    protected int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return getSignal(state, level, pos, direction);
     }
 
-    private static BusMuxBlockEntity getEntity(BlockGetter level, BlockPos pos) {
+    private static boolean read(BlockGetter level, BlockPos pos, Direction side) {
+        BlockState state = level.getBlockState(pos);
+        return state.getSignal(level, pos, side) > 0;
+    }
+
+    private static BusMergerBlockEntity getEntity(BlockGetter level, BlockPos pos) {
         BlockEntity entity = level.getBlockEntity(pos);
-        return entity instanceof BusMuxBlockEntity mux ? mux : null;
+        return entity instanceof BusMergerBlockEntity merger ? merger : null;
     }
 }

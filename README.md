@@ -2,110 +2,177 @@
 
 A digital electronics sandbox for Minecraft.
 
-Hardware Lab brings digital electronics into the Minecraft world: logic gates, digital signals, buses, memory, instruments and eventually programmable hardware.
+Hardware Lab is a physical playground for digital logic: gates, clocks, buses, memory, displays, an 8-bit CPU and a programmable 4-input LUT.
 
 ## Current status
 
-**Version:** 0.1.0 — Digital Logic
+**Version:** 0.2.0 — Complete Hardware Stack
 
-### Working
+The original roadmap is implemented as a playable baseline. The blocks use Minecraft redstone at the I/O boundary; internal values travel as packed digital buses.
+
+### Implemented
 
 - binary LOW / HIGH signal model
-- reusable logic functions
 - AND, OR, XOR, NAND, NOR, XNOR, NOT and BUFFER
-- Universal Logic Gate block with configurable gate type
-- Digital Wire with horizontal and vertical connections
-- Dedicated Redstone Input and Redstone Output adapters
-- Logic Probe for instantaneous signal inspection
-- Oscilloscope with a live 96-sample waveform
-- Clock Generator with 1 / 2 / 4 / 8 tick intervals
-- Clock Divider with divide-by-2 / 4 / 8 / 16
-- D Flip-Flop with rising-edge state storage
-- Register logic primitive for upcoming bus integration
+- Universal Logic Gate
+- Digital Wire
+- Redstone Input / Output adapters
+- Logic Probe
+- Oscilloscope
+- Clock Generator and Clock Divider
+- D Flip-Flop
 - 4 / 8 / 16 / 32-bit Digital Bus
-- Bus MUX with redstone select
-- Bus Splitter exposing four digital bit lanes at a time
+- Bus MUX
+- Bus Splitter and Bus Merger
+- Tri-State Bus Driver
+- 4-bit ADC and DAC bridges
+- 8-bit Register
+- 256-byte RAM
+- 256-byte ROM with selectable test patterns
+- 7-Segment Display endpoint
+- 8x8 LED Matrix endpoint
+- 8-bit CPU with a small instruction set and demo firmware
+- FPGA-style 4-input LUT with optional registered output
 
-### Roadmap
+## Roadmap
 
 - [x] Core digital signal model
 - [x] Universal Logic Gate
 - [x] Digital Wire
 - [x] Logic Probe
-- [x] Redstone adapters
+- [x] Redstone I/O
 - [x] Oscilloscope
 - [x] Clock Generator
 - [x] Clock Divider
 - [x] D Flip-Flop
-- [x] Register primitive
-- [x] Bus / Bus Splitter / MUX
-- [ ] 8-bit Register block
-- [ ] RAM / ROM
-- [ ] Displays
-- [ ] CPU
-- [ ] FPGA
+- [x] Registers
+- [x] Bus / Splitter / Merger / MUX
+- [x] 8-bit Register block
+- [x] RAM / ROM
+- [x] Displays
+- [x] CPU
+- [x] FPGA
 
 ## Port map
 
-### D Flip-Flop
+### 8-bit Register
 
-Relative to the block's facing direction:
+Relative to facing:
 
-- front: Q
-- front-left: /Q
-- back: D
-- front-right: CLK
+- back: 8-bit data bus input
+- front: 8-bit Q bus output
+- right: clock input
 
-The flip-flop captures D on the rising edge of CLK.
+Captures the input bus on the rising clock edge.
 
-### Clock Divider
+### RAM-256
 
-Relative to the block's facing direction:
+Relative to facing:
 
-- back: clock input
-- front: divided clock output
+- back: 8-bit address bus
+- left: 8-bit data input
+- right: redstone write enable
+- front: 8-bit data output
 
-Right-click cycles DIV2, DIV4, DIV8 and DIV16.
+A write occurs while write enable is HIGH.
 
-### Digital Bus
+### ROM-256
 
-Relative to the block's facing direction:
+Relative to facing:
 
-- back: bus input
-- front: bus output
+- back: 8-bit address bus
+- front: 8-bit data output
 
-Right-click cycles test patterns. Sneak-right-click cycles 4 / 8 / 16 / 32-bit width. With no bus input connected, the block acts as a test source; with an input connected, it forwards that bus value at its configured width.
+Right-click cycles deterministic ROM test images.
 
-### Bus MUX
+### 7-Segment Display
 
-Relative to the block's facing direction:
+Relative to facing:
 
-- back: input A
-- left: input B
-- right: redstone SELECT
-- front: bus output
+- back: 4-bit input
 
-SELECT LOW routes A. SELECT HIGH routes B. Right-click cycles 4 / 8 / 16 / 32-bit width.
+The endpoint stores and reports the displayed hexadecimal digit. Right-click shows the digit and binary value.
 
-### Bus Splitter
+### LED Matrix
 
-Relative to the block's facing direction:
+Relative to facing:
 
-- back: bus input
-- front: bit 0
-- left: bit 1
-- right: bit 2
-- top: bit 3
+- back: 8-bit row pattern input
 
-Right-click changes the active 4-bit bank. Sneak-right-click cycles bus width. This lets a 32-bit bus be inspected in eight 4-bit banks.
+Each click advances the selected row (0–7). The current row and eight LED states are available through the overlay and Logic Probe.
+
+### 8-bit CPU
+
+The CPU has A, B and PC registers, Z/C flags, a 256-byte RAM and a 256-byte program ROM. Its front-facing bus is the OUT register.
+
+Right-click cycles the built-in demo firmware. Sneak-right-click cycles instruction speed. The CPU executes continuously when not halted.
+
+Instruction set:
+
+- \`00 NOP\`
+- \`10 imm\` — LDI A
+- \`11 imm\` — LDI B
+- \`20\` — ADD A,B
+- \`21\` — SUB A,B
+- \`30\` — XOR A,B
+- \`31\` — AND A,B
+- \`32\` — OR A,B
+- \`40\` — OUT A
+- \`50 addr\` — LD A,[addr]
+- \`51 addr\` — ST A,[addr]
+- \`60 addr\` — JMP
+- \`61 addr\` — JZ
+- \`70\` — INC A
+- \`71\` — DEC A
+- \`72\` — SHL A
+- \`73\` — SHR A
+- \`F0\` — HALT
+
+### FPGA 4-LUT
+
+The FPGA block is a compact programmable-logic primitive:
+
+- back: input 0
+- left: input 1
+- right: input 2
+- top: input 3
+- bottom: clock for registered mode
+- front: logic output
+
+Right-click cycles four LUT configurations: AND4, OR4, parity XOR4 and MUX. Sneak-right-click toggles registered output mode. In registered mode the LUT result is captured on a rising clock edge.
+
+### Bus Driver
+
+The driver reads an 8-bit bus from its back and drives it to the front only while its right-side enable input is HIGH. Disabled output is electrically disconnected from the bus network.
+
+### Bus Merger
+
+The merger packs four redstone inputs into one 4-bit bank of its configured 4 / 8 / 16 / 32-bit output bus. It uses the same bank concept as Bus Splitter.
+
+### ADC / DAC
+
+ADC samples vanilla/redstone power (0–15) into a 4-bit digital bus.
+
+DAC converts the low four bits of an incoming bus back into redstone power (0–15).
+
+## Memory model
+
+Hardware Lab uses an 8-bit data path and 8-bit addresses for its standalone memory blocks, giving 256 addressable bytes.
+
+The CPU's conceptual map reserves:
+
+- \`0x00–0x7F\` — RAM region
+- \`0x80–0xEF\` — ROM region
+- \`0xF0\` — DISPLAY
+- \`0xF1\` — GPIO
+
+The standalone RAM/ROM blocks expose the same 8-bit address width physically through the bus system.
 
 ## Design principle
 
 Minecraft redstone is an I/O interface, not the foundation of the digital system.
 
-Inside Hardware Lab, signals and connections are represented by the mod's own digital-electronics model. Redstone connects that model to the Minecraft world.
-
-The current sequential blocks keep state in Block Entities instead of inflating block-state variants. Bus width/configuration state also lives in Block Entities so the physical blocks only need a facing property.
+Inside Hardware Lab, packed buses, stateful registers, memory and programmable logic are handled by the mod's own digital model. Block Entities hold state that should not explode into block-state variants.
 
 ## Development
 

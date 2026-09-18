@@ -20,26 +20,14 @@ public final class BusNetwork {
             return null;
         }
 
-        Direction facing = outputDirection(state.getBlock(), state);
-        if (facing != expectedDirection) {
+        if (output.getBusOutputDirection(state) != expectedDirection) {
+            return null;
+        }
+
+        if (!output.isBusDriving(level, pos, state)) {
             return null;
         }
 
         return output.getBusOutput(level, pos, state);
-    }
-
-    private static Direction outputDirection(
-            net.minecraft.world.level.block.Block block,
-            BlockState state
-    ) {
-        if (block instanceof DigitalBusBlock) {
-            return state.getValue(DigitalBusBlock.FACING);
-        }
-
-        if (block instanceof BusMuxBlock) {
-            return state.getValue(BusMuxBlock.FACING);
-        }
-
-        return Direction.NORTH;
     }
 }

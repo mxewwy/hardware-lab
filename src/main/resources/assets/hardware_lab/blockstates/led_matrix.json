@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "hardware_lab:block/led_matrix" },
+    "facing=east": { "model": "hardware_lab:block/led_matrix", "y": 90 },
+    "facing=south": { "model": "hardware_lab:block/led_matrix", "y": 180 },
+    "facing=west": { "model": "hardware_lab:block/led_matrix", "y": 270 }
+  }
+}
