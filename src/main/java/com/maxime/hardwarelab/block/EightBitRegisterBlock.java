@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.block.entity.EightBitRegisterBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.BusSignal;
@@ -139,4 +140,22 @@ public final class EightBitRegisterBlock extends BaseEntityBlock implements BusO
         BlockEntity entity = level.getBlockEntity(pos);
         return entity instanceof EightBitRegisterBlockEntity register ? register : null;
     }
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
 }

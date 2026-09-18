@@ -34,6 +34,28 @@ The original roadmap is implemented as a playable baseline. The blocks use Minec
 - 8-bit CPU with a small instruction set and demo firmware
 - FPGA-style 4-input LUT with optional registered output
 
+## Controls and in-game help
+
+Press **H** at any time in a world to open the Hardware Lab Guide.
+
+The guide starts with a concrete example circuit, then explains logic/timing, buses/memory/CPU and the two diagnostic tools. Use **Left / Right** to change pages and **Esc** to close it. The **Settings** button in the guide switches Hardware Lab between English and Russian and saves the choice in the mod config.
+
+Hold the **Logic Probe** and right-click a Hardware Lab component to open a component information panel. The server-side probe readout also reports the current value/state.
+
+Hold the **Oscilloscope** and right-click a signal source to open the live waveform viewer. Press **R** to clear the captured samples and **Esc** to close it.
+
+Every Hardware Lab block and tool has an expanded inventory tooltip describing its purpose and controls.
+
+The blocks use custom 16x16 pixel-art textures with separate visual families for logic, I/O, clocking, buses, memory, compute and displays. Digital Wire has distinct LOW/HIGH textures, a connection-aware cross/vertical collision shape and automatic network propagation. Directional blocks rotate their marked front face with their FACING state, making ports easier to read.
+
+### Signal conventions
+
+**Digital Wire** carries one binary bit and connects automatically to adjacent 1-bit signal blocks. It is not a bus cable.
+
+**Digital Bus** is the multi-bit path: 4 / 8 / 16 / 32 bits. Bus-capable blocks expose their bus ports by physical side and do not use Digital Wire for the packed bus itself.
+
+A green/light wire means HIGH; a dark wire means LOW. Use **Logic Probe** for a live readout and **Oscilloscope** for the signal over time.
+
 ## Roadmap
 
 - [x] Core digital signal model
@@ -109,24 +131,24 @@ Right-click cycles the built-in demo firmware. Sneak-right-click cycles instruct
 
 Instruction set:
 
-- \`00 NOP\`
-- \`10 imm\` — LDI A
-- \`11 imm\` — LDI B
-- \`20\` — ADD A,B
-- \`21\` — SUB A,B
-- \`30\` — XOR A,B
-- \`31\` — AND A,B
-- \`32\` — OR A,B
-- \`40\` — OUT A
-- \`50 addr\` — LD A,[addr]
-- \`51 addr\` — ST A,[addr]
-- \`60 addr\` — JMP
-- \`61 addr\` — JZ
-- \`70\` — INC A
-- \`71\` — DEC A
-- \`72\` — SHL A
-- \`73\` — SHR A
-- \`F0\` — HALT
+- `00 NOP`
+- `10 imm` — LDI A
+- `11 imm` — LDI B
+- `20` — ADD A,B
+- `21` — SUB A,B
+- `30` — XOR A,B
+- `31` — AND A,B
+- `32` — OR A,B
+- `40` — OUT A
+- `50 addr` — LD A,[addr]
+- `51 addr` — ST A,[addr]
+- `60 addr` — JMP
+- `61 addr` — JZ
+- `70` — INC A
+- `71` — DEC A
+- `72` — SHL A
+- `73` — SHR A
+- `F0` — HALT
 
 ### FPGA 4-LUT
 
@@ -161,10 +183,10 @@ Hardware Lab uses an 8-bit data path and 8-bit addresses for its standalone memo
 
 The CPU's conceptual map reserves:
 
-- \`0x00–0x7F\` — RAM region
-- \`0x80–0xEF\` — ROM region
-- \`0xF0\` — DISPLAY
-- \`0xF1\` — GPIO
+- `0x00–0x7F` — RAM region
+- `0x80–0xEF` — ROM region
+- `0xF0` — DISPLAY
+- `0xF1` — GPIO
 
 The standalone RAM/ROM blocks expose the same 8-bit address width physically through the bus system.
 

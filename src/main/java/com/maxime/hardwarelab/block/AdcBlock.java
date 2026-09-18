@@ -63,4 +63,22 @@ public final class AdcBlock extends HorizontalDirectionalBlock implements BusOut
     protected int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return getSignal(state, level, pos, direction);
     }
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
 }

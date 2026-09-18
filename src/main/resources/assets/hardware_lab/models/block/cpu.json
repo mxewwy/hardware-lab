@@ -1,4 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": { "all": "minecraft:block/observer_side" }
+  "parent": "hardware_lab:block/compute",
+  "textures": {
+    "down": "hardware_lab:block/compute",
+    "up": "hardware_lab:block/compute",
+    "north": "hardware_lab:block/compute",
+    "south": "hardware_lab:block/compute",
+    "west": "hardware_lab:block/compute",
+    "east": "hardware_lab:block/compute"
+  }
 }

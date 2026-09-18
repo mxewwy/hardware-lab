@@ -21,5 +21,7 @@
   "block.hardware_lab.cpu": "8-bit CPU",
   "block.hardware_lab.fpga": "FPGA 4-LUT",
   "item.hardware_lab.logic_probe": "Logic Probe",
-  "item.hardware_lab.oscilloscope": "Oscilloscope"
+  "item.hardware_lab.oscilloscope": "Oscilloscope",
+  "key.category.hardware_lab.controls": "Hardware Lab",
+  "key.hardware_lab.open_guide": "Open Hardware Lab Guide"
 }

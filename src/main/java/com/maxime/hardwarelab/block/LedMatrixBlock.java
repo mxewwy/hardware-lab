@@ -102,4 +102,22 @@ public final class LedMatrixBlock extends BaseEntityBlock {
         BlockEntity entity = level.getBlockEntity(pos);
         return entity instanceof LedMatrixBlockEntity matrix ? matrix : null;
     }
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
 }

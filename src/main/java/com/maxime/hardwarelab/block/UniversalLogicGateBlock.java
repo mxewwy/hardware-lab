@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.logic.GateType;
 import com.maxime.hardwarelab.logic.Signal;
 import com.mojang.serialization.MapCodec;
@@ -66,7 +67,7 @@ public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
         }
 
         if (level.isClientSide()) {
-            player.sendOverlayMessage(Component.literal("Logic Gate: " + next.displayName()));
+            player.sendOverlayMessage(Component.literal(HardwareLabLanguage.blockName("universal_logic_gate") + ": " + next.displayName()));
         }
 
         return InteractionResult.SUCCESS;
@@ -145,4 +146,22 @@ public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
         level.updateNeighborsAt(pos, ModBlocks.UNIVERSAL_LOGIC_GATE);
         level.updateNeighborsAt(pos.relative(facing), ModBlocks.UNIVERSAL_LOGIC_GATE);
     }
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
 }

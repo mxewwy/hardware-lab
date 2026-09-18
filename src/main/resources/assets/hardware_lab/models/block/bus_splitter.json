@@ -1,6 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "hardware_lab:block/bus",
   "textures": {
-    "all": "minecraft:block/dispenser_front"
+    "down": "hardware_lab:block/bus",
+    "up": "hardware_lab:block/bus",
+    "north": "hardware_lab:block/bus",
+    "south": "hardware_lab:block/bus",
+    "west": "hardware_lab:block/bus",
+    "east": "hardware_lab:block/bus"
   }
 }

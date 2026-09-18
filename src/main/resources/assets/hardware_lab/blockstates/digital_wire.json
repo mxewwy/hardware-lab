@@ -1,45 +1,18 @@
 {
   "multipart": [
-    {
-      "apply": {
-        "model": "hardware_lab:block/digital_wire_core"
-      }
-    },
-    {
-      "when": { "north": true },
-      "apply": {
-        "model": "hardware_lab:block/digital_wire_north"
-      }
-    },
-    {
-      "when": { "south": true },
-      "apply": {
-        "model": "hardware_lab:block/digital_wire_south"
-      }
-    },
-    {
-      "when": { "east": true },
-      "apply": {
-        "model": "hardware_lab:block/digital_wire_east"
-      }
-    },
-    {
-      "when": { "west": true },
-      "apply": {
-        "model": "hardware_lab:block/digital_wire_west"
-      }
-    },
-    {
-      "when": { "up": true },
-      "apply": {
-        "model": "hardware_lab:block/digital_wire_up"
-      }
-    },
-    {
-      "when": { "down": true },
-      "apply": {
-        "model": "hardware_lab:block/digital_wire_down"
-      }
-    }
+    {"when":{"powered":false},"apply":{"model":"hardware_lab:block/digital_wire_core"}},
+    {"when":{"powered":true},"apply":{"model":"hardware_lab:block/digital_wire_core_on"}},
+    {"when":{"powered":false,"north":true},"apply":{"model":"hardware_lab:block/digital_wire_north"}},
+    {"when":{"powered":true,"north":true},"apply":{"model":"hardware_lab:block/digital_wire_north_on"}},
+    {"when":{"powered":false,"south":true},"apply":{"model":"hardware_lab:block/digital_wire_south"}},
+    {"when":{"powered":true,"south":true},"apply":{"model":"hardware_lab:block/digital_wire_south_on"}},
+    {"when":{"powered":false,"east":true},"apply":{"model":"hardware_lab:block/digital_wire_east"}},
+    {"when":{"powered":true,"east":true},"apply":{"model":"hardware_lab:block/digital_wire_east_on"}},
+    {"when":{"powered":false,"west":true},"apply":{"model":"hardware_lab:block/digital_wire_west"}},
+    {"when":{"powered":true,"west":true},"apply":{"model":"hardware_lab:block/digital_wire_west_on"}},
+    {"when":{"powered":false,"up":true},"apply":{"model":"hardware_lab:block/digital_wire_up"}},
+    {"when":{"powered":true,"up":true},"apply":{"model":"hardware_lab:block/digital_wire_up_on"}},
+    {"when":{"powered":false,"down":true},"apply":{"model":"hardware_lab:block/digital_wire_down"}},
+    {"when":{"powered":true,"down":true},"apply":{"model":"hardware_lab:block/digital_wire_down_on"}}
   ]
 }

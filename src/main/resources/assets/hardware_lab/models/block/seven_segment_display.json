@@ -1,4 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": { "all": "minecraft:block/redstone_lamp" }
+  "parent": "hardware_lab:block/display",
+  "textures": {
+    "down": "hardware_lab:block/display",
+    "up": "hardware_lab:block/display",
+    "north": "hardware_lab:block/display",
+    "south": "hardware_lab:block/display",
+    "west": "hardware_lab:block/display",
+    "east": "hardware_lab:block/display"
+  }
 }

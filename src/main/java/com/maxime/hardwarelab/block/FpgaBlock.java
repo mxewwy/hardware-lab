@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.block.entity.FpgaBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.BusSignal;
@@ -107,7 +108,7 @@ public final class FpgaBlock extends BaseEntityBlock implements BusOutputBlock {
         }
 
         player.sendOverlayMessage(Component.literal(
-                "FPGA 4-LUT | MODE=" + entity.mode().displayName()
+                HardwareLabLanguage.blockName("fpga") + " | MODE=" + entity.mode().displayName()
                         + " | " + (entity.registered() ? "REGISTERED" : "COMBINATIONAL")
                         + " | LUT=0x" + String.format("%04X", FpgaLut.truthTable(entity.mode()))
         ));
@@ -171,4 +172,22 @@ public final class FpgaBlock extends BaseEntityBlock implements BusOutputBlock {
         BlockEntity entity = level.getBlockEntity(pos);
         return entity instanceof FpgaBlockEntity fpga ? fpga : null;
     }
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
 }

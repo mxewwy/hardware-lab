@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.logic.ClockRate;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -65,7 +66,7 @@ public class ClockGeneratorBlock extends HorizontalDirectionalBlock {
 
         if (!level.isClientSide()) {
             level.setBlockAndUpdate(pos, state.setValue(RATE, next));
-            player.sendOverlayMessage(Component.literal("Clock: " + next.displayName()));
+            player.sendOverlayMessage(Component.literal(HardwareLabLanguage.blockName("clock_generator") + ": " + next.displayName()));
         }
 
         return InteractionResult.SUCCESS;
@@ -119,4 +120,22 @@ public class ClockGeneratorBlock extends HorizontalDirectionalBlock {
     ) {
         return getSignal(state, level, pos, direction);
     }
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.block.entity.BusMergerBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.BusSignal;
@@ -75,7 +76,7 @@ public final class BusMergerBlock extends BaseEntityBlock implements BusOutputBl
         }
 
         player.sendOverlayMessage(Component.literal(
-                "Bus Merger | WIDTH=" + entity.width().bits()
+                HardwareLabLanguage.blockName("bus_merger") + " | WIDTH=" + entity.width().bits()
                         + " | BANK=" + entity.bank()
                         + " | BITS=" + entity.firstBit() + "-" + (entity.firstBit() + 3)
         ));
@@ -143,4 +144,22 @@ public final class BusMergerBlock extends BaseEntityBlock implements BusOutputBl
         BlockEntity entity = level.getBlockEntity(pos);
         return entity instanceof BusMergerBlockEntity merger ? merger : null;
     }
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.block.entity.ClockDividerBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.DivisionFactor;
@@ -73,7 +74,7 @@ public class ClockDividerBlock extends BaseEntityBlock {
         int next = nextDivision(entity.division());
         entity.setDivision(next);
 
-        player.sendOverlayMessage(Component.literal("Clock Divider: 1/" + next));
+        player.sendOverlayMessage(Component.literal(HardwareLabLanguage.blockName("clock_divider") + ": 1/" + next));
         level.updateNeighborsAt(pos, this);
 
         return InteractionResult.SUCCESS;
@@ -150,4 +151,22 @@ public class ClockDividerBlock extends BaseEntityBlock {
 
         return DivisionFactor.DIVIDE_BY_2.factor();
     }
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
 }

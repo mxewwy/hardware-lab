@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.block.entity.Ram256BlockEntity;
 import com.maxime.hardwarelab.logic.BusSignal;
@@ -71,7 +72,7 @@ public final class Ram256Block extends BaseEntityBlock implements BusOutputBlock
         int address = readAddress(level, pos, state.getValue(FACING));
         if (player.isShiftKeyDown()) {
             entity.clear();
-            player.sendOverlayMessage(Component.literal("RAM-256 | CLEARED"));
+            player.sendOverlayMessage(Component.literal(HardwareLabLanguage.blockName("ram_256") + " | CLEARED"));
         } else {
             player.sendOverlayMessage(Component.literal(
                     "RAM-256 | ADDR=0x" + String.format("%02X", address)
@@ -159,4 +160,22 @@ public final class Ram256Block extends BaseEntityBlock implements BusOutputBlock
         BlockEntity entity = level.getBlockEntity(pos);
         return entity instanceof Ram256BlockEntity ram ? ram : null;
     }
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
 }

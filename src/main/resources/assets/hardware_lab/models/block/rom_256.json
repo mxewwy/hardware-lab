@@ -1,4 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": { "all": "minecraft:block/amethyst_block" }
+  "parent": "hardware_lab:block/memory",
+  "textures": {
+    "down": "hardware_lab:block/memory",
+    "up": "hardware_lab:block/memory",
+    "north": "hardware_lab:block/memory",
+    "south": "hardware_lab:block/memory",
+    "west": "hardware_lab:block/memory",
+    "east": "hardware_lab:block/memory"
+  }
 }

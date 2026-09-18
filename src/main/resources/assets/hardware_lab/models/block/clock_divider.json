@@ -1,6 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "hardware_lab:block/clock",
   "textures": {
-    "all": "minecraft:block/redstone_block"
+    "down": "hardware_lab:block/clock",
+    "up": "hardware_lab:block/clock",
+    "north": "hardware_lab:block/clock",
+    "south": "hardware_lab:block/clock",
+    "west": "hardware_lab:block/clock",
+    "east": "hardware_lab:block/clock"
   }
 }

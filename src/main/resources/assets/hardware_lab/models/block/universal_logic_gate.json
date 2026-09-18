@@ -1,6 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "hardware_lab:block/logic",
   "textures": {
-    "all": "minecraft:block/redstone_block"
+    "down": "hardware_lab:block/logic",
+    "up": "hardware_lab:block/logic",
+    "north": "hardware_lab:block/logic",
+    "south": "hardware_lab:block/logic",
+    "west": "hardware_lab:block/logic",
+    "east": "hardware_lab:block/logic"
   }
 }

@@ -8,7 +8,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
@@ -24,7 +23,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.redstone.Orientation;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class DigitalWireBlock extends Block {
     public static final MapCodec<DigitalWireBlock> CODEC = simpleCodec(DigitalWireBlock::new);
@@ -110,8 +112,7 @@ public class DigitalWireBlock extends Block {
             return;
         }
 
-        updatePower(level, pos, state);
-        updateNeighborWires(level, pos);
+        propagateNetwork(level, pos);
     }
 
     @Override
@@ -125,7 +126,11 @@ public class DigitalWireBlock extends Block {
             return;
         }
 
-        updateNeighborWires(level, pos);
+        for (Direction direction : Direction.values()) {
+            if (level.getBlockState(pos.relative(direction)).getBlock() instanceof DigitalWireBlock) {
+                propagateNetwork(level, pos.relative(direction));
+            }
+        }
     }
 
     @Override
@@ -138,7 +143,7 @@ public class DigitalWireBlock extends Block {
             boolean movedByPiston
     ) {
         if (!level.isClientSide()) {
-            updatePower(level, pos, state);
+            propagateNetwork(level, pos);
         }
     }
 
@@ -179,7 +184,100 @@ public class DigitalWireBlock extends Block {
             BlockPos pos,
             CollisionContext context
     ) {
-        return Shapes.empty();
+        return shapeForState(state);
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(
+            BlockState state,
+            BlockGetter level,
+            BlockPos pos,
+            CollisionContext context
+    ) {
+        return shapeForState(state);
+    }
+
+    private static VoxelShape shapeForState(BlockState state) {
+        VoxelShape shape = Shapes.box(6.0 / 16.0, 0.0, 6.0 / 16.0, 10.0 / 16.0, 2.0 / 16.0, 10.0 / 16.0);
+
+        if (state.getValue(NORTH)) shape = Shapes.or(shape, Shapes.box(7.0 / 16.0, 0.0, 0.0, 9.0 / 16.0, 2.0 / 16.0, 10.0 / 16.0));
+        if (state.getValue(SOUTH)) shape = Shapes.or(shape, Shapes.box(7.0 / 16.0, 0.0, 6.0 / 16.0, 9.0 / 16.0, 2.0 / 16.0, 1.0));
+        if (state.getValue(EAST))  shape = Shapes.or(shape, Shapes.box(6.0 / 16.0, 0.0, 7.0 / 16.0, 1.0, 2.0 / 16.0, 9.0 / 16.0));
+        if (state.getValue(WEST))  shape = Shapes.or(shape, Shapes.box(0.0, 0.0, 7.0 / 16.0, 10.0 / 16.0, 2.0 / 16.0, 9.0 / 16.0));
+        if (state.getValue(UP))    shape = Shapes.or(shape, Shapes.box(6.0 / 16.0, 2.0 / 16.0, 6.0 / 16.0, 10.0 / 16.0, 1.0, 10.0 / 16.0));
+        if (state.getValue(DOWN))  shape = Shapes.or(shape, Shapes.box(6.0 / 16.0, 0.0, 6.0 / 16.0, 10.0 / 16.0, 14.0 / 16.0, 10.0 / 16.0));
+
+        return shape;
+    }
+
+    private static boolean propagating;
+
+    private static void propagateNetwork(Level level, BlockPos start) {
+        if (propagating) {
+            return;
+        }
+
+        propagating = true;
+        try {
+            Set<BlockPos> wires = new HashSet<>();
+            ArrayDeque<BlockPos> queue = new ArrayDeque<>();
+            queue.add(start);
+
+            while (!queue.isEmpty()) {
+                BlockPos pos = queue.removeFirst();
+                if (!wires.add(pos)) {
+                    continue;
+                }
+
+                if (!(level.getBlockState(pos).getBlock() instanceof DigitalWireBlock)) {
+                    wires.remove(pos);
+                    continue;
+                }
+
+                for (Direction direction : Direction.values()) {
+                    BlockPos next = pos.relative(direction);
+                    if (level.getBlockState(next).getBlock() instanceof DigitalWireBlock && !wires.contains(next)) {
+                        queue.addLast(next);
+                    }
+                }
+            }
+
+            for (BlockPos pos : wires) {
+                BlockState state = level.getBlockState(pos);
+                BlockState connected = updateConnections(level, state, pos);
+                if (!connected.equals(state)) {
+                    level.setBlock(pos, connected, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+                }
+            }
+
+            for (BlockPos pos : wires) {
+                BlockState state = level.getBlockState(pos);
+                boolean powered = false;
+
+                for (Direction direction : Direction.values()) {
+                    BlockPos neighbourPos = pos.relative(direction);
+                    if (level.getBlockState(neighbourPos).getBlock() instanceof DigitalWireBlock) {
+                        continue;
+                    }
+
+                    if (level.getSignal(neighbourPos, direction.getOpposite()) > 0) {
+                        powered = true;
+                        break;
+                    }
+                }
+
+                BlockState current = level.getBlockState(pos);
+                if (current.getValue(POWERED) != powered) {
+                    level.setBlock(pos, current.setValue(POWERED, powered), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+                }
+            }
+
+            for (BlockPos pos : wires) {
+                level.updateNeighborsAt(pos, ModBlocks.DIGITAL_WIRE);
+            }
+        } finally {
+            propagating = false;
+        }
     }
 
     private static BlockState updateConnections(BlockGetter level, BlockState state, BlockPos pos) {
@@ -197,31 +295,5 @@ public class DigitalWireBlock extends Block {
         return state.getBlock() instanceof DigitalWireBlock || state.isSignalSource();
     }
 
-    private static void updatePower(Level level, BlockPos pos, BlockState state) {
-        boolean powered = false;
 
-        for (Direction direction : Direction.values()) {
-            BlockPos sourcePos = pos.relative(direction);
-            if (level.getSignal(sourcePos, direction.getOpposite()) > 0) {
-                powered = true;
-                break;
-            }
-        }
-
-        if (powered != state.getValue(POWERED)) {
-            BlockState updated = state.setValue(POWERED, powered);
-            level.setBlock(pos, updated, Block.UPDATE_ALL);
-            level.updateNeighborsAt(pos, ModBlocks.DIGITAL_WIRE);
-            updateNeighborWires(level, pos);
-        }
-    }
-
-    private static void updateNeighborWires(LevelAccessor level, BlockPos pos) {
-        for (Direction direction : Direction.values()) {
-            BlockPos neighborPos = pos.relative(direction);
-            if (level.getBlockState(neighborPos).getBlock() instanceof DigitalWireBlock) {
-                level.updateNeighborsAt(neighborPos, ModBlocks.DIGITAL_WIRE);
-            }
-        }
-    }
 }
