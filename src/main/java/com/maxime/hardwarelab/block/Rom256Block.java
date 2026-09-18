@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.block.entity.Rom256BlockEntity;
 import com.maxime.hardwarelab.logic.BusSignal;
@@ -71,7 +72,7 @@ public final class Rom256Block extends BaseEntityBlock implements BusOutputBlock
         entity.cyclePattern();
         int address = readAddress(level, pos, state.getValue(FACING));
         player.sendOverlayMessage(Component.literal(
-                "ROM-256 | PATTERN=" + entity.pattern()
+                HardwareLabLanguage.blockName("rom_256") + " | PATTERN=" + entity.pattern()
                         + " | ADDR=0x" + String.format("%02X", address)
                         + " | DATA=0x" + String.format("%02X", entity.read(address))
         ));
