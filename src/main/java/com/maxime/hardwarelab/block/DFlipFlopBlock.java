@@ -17,6 +17,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 
 public class DFlipFlopBlock extends BaseEntityBlock {
     public static final MapCodec<DFlipFlopBlock> CODEC = simpleCodec(DFlipFlopBlock::new);
+    public static final net.minecraft.world.level.block.state.properties.EnumProperty<Direction> FACING =
+            HorizontalDirectionalBlock.FACING;
 
     public DFlipFlopBlock(Properties properties) {
         super(properties);
