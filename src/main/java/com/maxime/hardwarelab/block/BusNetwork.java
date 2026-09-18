@@ -24,6 +24,10 @@ public final class BusNetwork {
             return null;
         }
 
+        if (!output.isBusDriving(level, pos, state)) {
+            return null;
+        }
+
         return output.getBusOutput(level, pos, state);
     }
 }
