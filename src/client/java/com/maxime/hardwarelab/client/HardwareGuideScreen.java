@@ -1,113 +1,142 @@
 package com.maxime.hardwarelab.client;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 
 public final class HardwareGuideScreen extends Screen {
-    private record Entry(String name, String purpose, String control) {}
-
-    private static final Entry[][] PAGES = {
-            {
-                    new Entry("Universal Logic Gate", "AND / OR / XOR / NAND / NOR / XNOR / NOT / BUFFER", "Right-click: next logic function"),
-                    new Entry("Digital Wire", "Binary HIGH / LOW carrier", "Connect to signal sources"),
-                    new Entry("Redstone Input", "Vanilla redstone -> hardware signal", "Input is the marked face"),
-                    new Entry("Redstone Output", "Hardware signal -> vanilla redstone", "Output is the marked face"),
-                    new Entry("Clock Generator", "Periodic digital clock source", "Right-click: change rate"),
-                    new Entry("Clock Divider", "Divides an incoming clock", "Right-click: change division"),
-                    new Entry("D Flip-Flop", "Stores one bit on a clock edge", "D + CLK in, Q out")
-            },
-            {
-                    new Entry("Digital Bus", "Manual 4 / 8 / 16 / 32-bit source", "Right-click: pattern | Shift + right-click: width"),
-                    new Entry("Bus MUX", "Selects one of two bus inputs", "Right-click: width | SELECT = redstone"),
-                    new Entry("Bus Splitter", "Extracts one 4-bit bank", "Right-click: bank | Shift + right-click: width"),
-                    new Entry("Bus Merger", "Inserts one 4-bit bank", "Right-click: bank | Shift + right-click: width"),
-                    new Entry("Tri-State Bus Driver", "Drives a shared bus when enabled", "Side redstone input = enable"),
-                    new Entry("4-bit ADC", "Redstone power -> 4-bit bus", "Input from the back"),
-                    new Entry("4-bit DAC", "4-bit bus -> redstone", "Bus in, redstone out"),
-                    new Entry("8-bit Register", "Holds a byte", "Clock/load controls the latch"),
-                    new Entry("RAM-256", "256 bytes read/write memory", "Address selects byte | Shift + right-click: clear"),
-                    new Entry("ROM-256", "256-byte read-only demo source", "Right-click: cycle demo pattern")
-            },
-            {
-                    new Entry("7-Segment Display", "Hexadecimal display endpoint", "Feed a 4-bit value"),
-                    new Entry("8x8 LED Matrix", "Byte-sized visual endpoint", "Feed row + 8-bit data"),
-                    new Entry("8-bit CPU", "Runs the built-in CPU ISA", "Right-click: program | Shift + right-click: speed"),
-                    new Entry("FPGA 4-LUT", "Four-input programmable truth table", "Right-click: LUT mode | Shift + right-click: register"),
-                    new Entry("Logic Probe", "Inspect a component and read live values", "Right-click a component"),
-                    new Entry("Oscilloscope", "Watch a live redstone waveform", "Right-click source | R: reset"),
-                    new Entry("Hardware Guide", "This panel", "H: open | Left/Right: page | Esc: close")
-            }
-    };
-
     private int page;
 
+    private static final String[] LOGIC = {
+            "universal_logic_gate", "digital_wire", "redstone_input", "redstone_output",
+            "clock_generator", "clock_divider", "d_flip_flop", "adc", "dac"
+    };
+
+    private static final String[] COMPUTE = {
+            "digital_bus", "bus_mux", "bus_splitter", "bus_merger", "bus_driver",
+            "eight_bit_register", "ram_256", "rom_256", "seven_segment_display",
+            "led_matrix", "cpu", "fpga"
+    };
+
     public HardwareGuideScreen() {
-        super(Component.literal("Hardware Lab Guide"));
+        super(HardwareLabLanguage.component("gui.guide.title"));
+    }
+
+    @Override
+    protected void init() {
+        int panelWidth = Math.min(780, this.width - 40);
+        int left = (this.width - panelWidth) / 2;
+        int bottom = Math.min(this.height - 18, 378);
+
+        this.addRenderableWidget(Button.builder(
+                HardwareLabLanguage.component("gui.guide.settings"),
+                button -> this.minecraft.gui.setScreen(new HardwareSettingsScreen(this))
+        ).bounds(left + panelWidth - 124, bottom - 28, 108, 20).build());
     }
 
     @Override
     public boolean keyPressed(KeyEvent input) {
-        int keyCode = input.key();
-
-        if (keyCode == InputConstants.KEY_LEFT) {
-            this.page = (this.page + PAGES.length - 1) % PAGES.length;
+        int key = input.key();
+        if (key == InputConstants.KEY_LEFT) {
+            page = (page + 3) % 4;
             return true;
         }
-        if (keyCode == InputConstants.KEY_RIGHT) {
-            this.page = (this.page + 1) % PAGES.length;
+        if (key == InputConstants.KEY_RIGHT) {
+            page = (page + 1) % 4;
             return true;
         }
         return super.keyPressed(input);
     }
 
     @Override
-    public void extractRenderState(
-            GuiGraphicsExtractor graphics,
-            int mouseX,
-            int mouseY,
-            float delta
-    ) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
         super.extractRenderState(graphics, mouseX, mouseY, delta);
 
-        graphics.fill(0, 0, this.width, this.height, 0xC9090C10);
+        graphics.fill(0, 0, width, height, 0xC9090C10);
 
-        int panelWidth = Math.min(760, this.width - 40);
-        int left = (this.width - panelWidth) / 2;
-        int top = 22;
+        int panelWidth = Math.min(780, width - 40);
+        int left = (width - panelWidth) / 2;
+        int top = 18;
         int right = left + panelWidth;
-        int bottom = Math.min(this.height - 22, top + 320);
+        int bottom = Math.min(height - 18, top + 360);
 
         graphics.fill(left, top, right, bottom, 0xF013171C);
         graphics.fill(left, top, right, top + 3, 0xFF4DE38B);
 
-        graphics.text(this.font, "HARDWARE LAB // GUIDE", left + 18, top + 15, 0xFFFFFFFF, true);
-        graphics.text(this.font, "PAGE " + (this.page + 1) + " / " + PAGES.length, right - 72, top + 15, 0xFF7F8B96, false);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.header"), left + 18, top + 15, 0xFFFFFFFF, true);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.page") + " " + (page + 1) + " / 4",
+                right - 100, top + 15, 0xFF7F8B96, false);
 
-        Entry[] entries = PAGES[this.page];
-        int columns = 2;
-        int rows = (entries.length + columns - 1) / columns;
-        int columnWidth = (panelWidth - 44) / columns;
-
-        for (int i = 0; i < entries.length; i++) {
-            Entry entry = entries[i];
-            int column = i / rows;
-            int row = i % rows;
-            int x = left + 18 + column * columnWidth;
-            int y = top + 45 + row * 43;
-
-            graphics.text(this.font, entry.name, x, y, 0xFFFFFFFF, true);
-            graphics.text(this.font, entry.purpose, x, y + 12, 0xFFB9C2CC, false);
-            graphics.text(this.font, entry.control, x, y + 24, 0xFF7F8B96, false);
+        switch (page) {
+            case 0 -> drawQuickStart(graphics, left, top);
+            case 1 -> drawComponents(graphics, left, top, LOGIC, HardwareLabLanguage.text("gui.guide.logic"));
+            case 2 -> drawComponents(graphics, left, top, COMPUTE, HardwareLabLanguage.text("gui.guide.buses"));
+            case 3 -> drawTools(graphics, left, top);
+            default -> {}
         }
 
-        graphics.fill(left + 16, bottom - 30, right - 16, bottom - 29, 0xFF2C343D);
-        graphics.text(this.font, "<", left + 18, bottom - 20, 0xFFB9C2CC, true);
-        graphics.text(this.font, "LEFT / RIGHT", left + 31, bottom - 20, 0xFF7F8B96, false);
-        graphics.text(this.font, "PAGE", left + 108, bottom - 20, 0xFF7F8B96, false);
-        graphics.text(this.font, "ESC", right - 45, bottom - 20, 0xFF7F8B96, false);
+        graphics.fill(left + 16, bottom - 39, right - 16, bottom - 38, 0xFF2C343D);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.footer"),
+                left + 18, bottom - 27, 0xFF7F8B96, false);
+    }
+
+    private void drawQuickStart(GuiGraphicsExtractor graphics, int left, int top) {
+        drawStep(graphics, left, top + 52, "gui.guide.step1", "gui.guide.step1b");
+        drawStep(graphics, left, top + 101, "gui.guide.step2", "gui.guide.step2b");
+        drawStep(graphics, left, top + 150, "gui.guide.step3", "gui.guide.step3b");
+        drawStep(graphics, left, top + 199, "gui.guide.step4", "gui.guide.step4b");
+
+        graphics.fill(left + 18, top + 245, left + 370, top + 247, 0xFF2C343D);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.rules"), left + 18, top + 259, 0xFFFFFFFF, true);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.rule1"), left + 18, top + 276, 0xFFB9C2CC, false);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.rule2"), left + 18, top + 292, 0xFFB9C2CC, false);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.rule3"), left + 18, top + 308, 0xFFB9C2CC, false);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.rule4"), left + 18, top + 324, 0xFFB9C2CC, false);
+    }
+
+    private void drawStep(GuiGraphicsExtractor graphics, int left, int y, String titleKey, String bodyKey) {
+        graphics.text(font, HardwareLabLanguage.text(titleKey), left + 18, y, 0xFF4DE38B, true);
+        graphics.text(font, HardwareLabLanguage.text(bodyKey), left + 18, y + 16, 0xFFB9C2CC, false);
+    }
+
+    private void drawComponents(GuiGraphicsExtractor graphics, int left, int top, String[] ids, String section) {
+        graphics.text(font, section, left + 18, top + 45, 0xFFFFFFFF, true);
+
+        int columns = 2;
+        int rows = (ids.length + columns - 1) / columns;
+        int columnWidth = 370;
+
+        for (int i = 0; i < ids.length; i++) {
+            int col = i / rows;
+            int row = i % rows;
+            int x = left + 18 + col * columnWidth;
+            int y = top + 66 + row * 28;
+
+            String id = ids[i];
+            graphics.text(font, HardwareLabLanguage.blockName(id), x, y, 0xFFFFFFFF, true);
+            graphics.text(font, HardwareLabLanguage.control(id), x, y + 12, 0xFF8F9AA5, false);
+        }
+    }
+
+    private void drawTools(GuiGraphicsExtractor graphics, int left, int top) {
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.tools"), left + 18, top + 48, 0xFFFFFFFF, true);
+        graphics.text(font, HardwareLabLanguage.itemName("logic_probe"), left + 18, top + 74, 0xFFFFFFFF, true);
+        graphics.text(font, HardwareLabLanguage.control("logic_probe"), left + 18, top + 88, 0xFFB9C2CC, false);
+        graphics.text(font, HardwareLabLanguage.itemName("oscilloscope"), left + 18, top + 118, 0xFFFFFFFF, true);
+        graphics.text(font, HardwareLabLanguage.control("oscilloscope"), left + 18, top + 132, 0xFFB9C2CC, false);
+
+        graphics.text(font, "H", left + 18, top + 168, 0xFF4DE38B, true);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.step4b"), left + 36, top + 168, 0xFFB9C2CC, false);
+
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.settings"), left + 18, top + 212, 0xFFFFFFFF, true);
+        graphics.text(font, HardwareLabLanguage.text("gui.settings.language_help"),
+                left + 18, top + 228, 0xFFB9C2CC, false);
+        graphics.text(font, HardwareLabLanguage.text("gui.settings.english") + " / " +
+                HardwareLabLanguage.text("gui.settings.russian"),
+                left + 18, top + 247, 0xFF8F9AA5, false);
     }
 }
