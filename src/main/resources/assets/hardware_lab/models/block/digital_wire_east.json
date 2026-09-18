@@ -1,18 +1,38 @@
 {
   "textures": {
-    "texture": "minecraft:block/redstone_block"
+    "texture": "hardware_lab:block/digital_wire_off"
   },
   "elements": [
     {
-      "from": [6, 0, 7],
-      "to": [16, 2, 9],
+      "from": [
+        6,
+        0,
+        7
+      ],
+      "to": [
+        16,
+        2,
+        9
+      ],
       "faces": {
-        "down": { "texture": "#texture" },
-        "up": { "texture": "#texture" },
-        "north": { "texture": "#texture" },
-        "south": { "texture": "#texture" },
-        "west": { "texture": "#texture" },
-        "east": { "texture": "#texture" }
+        "down": {
+          "texture": "#texture"
+        },
+        "up": {
+          "texture": "#texture"
+        },
+        "north": {
+          "texture": "#texture"
+        },
+        "south": {
+          "texture": "#texture"
+        },
+        "west": {
+          "texture": "#texture"
+        },
+        "east": {
+          "texture": "#texture"
+        }
       }
     }
   ]
