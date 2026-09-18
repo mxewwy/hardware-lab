@@ -26,7 +26,7 @@ public final class DacBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
+        builder.add(FACING);
     }
 
     @Override
