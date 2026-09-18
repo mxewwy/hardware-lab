@@ -70,10 +70,6 @@ public final class HardwareSettingsScreen extends Screen {
                 + (HardwareLabLanguage.isRussian() ? "" : "  [" + selected + "]")));
         russian.setMessage(Component.literal(HardwareLabLanguage.text("gui.settings.russian")
                 + (HardwareLabLanguage.isRussian() ? "  [" + selected + "]" : "")));
-        setTitle(HardwareLabLanguage.component("gui.settings.title"));
     }
 
-    private void setTitle(Component title) {
-        this.title = title;
-    }
 }
