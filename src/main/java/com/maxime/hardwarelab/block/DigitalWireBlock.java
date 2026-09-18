@@ -3,6 +3,7 @@ package com.maxime.hardwarelab.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.redstone.Orientation;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
@@ -44,21 +46,17 @@ public class DigitalWireBlock extends Block {
             Direction.WEST, WEST
     );
 
-    private static final VoxelShape CORE = Block.box(6.0, 0.0, 6.0, 10.0, 2.0, 10.0);
-
     public DigitalWireBlock(BlockBehaviour.Properties properties) {
         super(properties);
 
-        BlockState state = defaultBlockState()
+        registerDefaultState(defaultBlockState()
                 .setValue(POWERED, false)
                 .setValue(UP, false)
                 .setValue(DOWN, false)
                 .setValue(NORTH, false)
                 .setValue(EAST, false)
                 .setValue(SOUTH, false)
-                .setValue(WEST, false);
-
-        registerDefaultState(state);
+                .setValue(WEST, false));
     }
 
     @Override
@@ -87,10 +85,6 @@ public class DigitalWireBlock extends Block {
             BlockState neighbourState,
             RandomSource random
     ) {
-        if (directionToNeighbour == Direction.DOWN && !state.canSurvive(level, pos)) {
-            return net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
-        }
-
         BooleanProperty property = CONNECTIONS.get(directionToNeighbour);
         if (property == null) {
             return state;
@@ -123,11 +117,11 @@ public class DigitalWireBlock extends Block {
     @Override
     protected void affectNeighborsAfterRemoval(
             BlockState state,
-            Level level,
+            ServerLevel level,
             BlockPos pos,
             boolean movedByPiston
     ) {
-        if (level.isClientSide()) {
+        if (movedByPiston) {
             return;
         }
 
@@ -140,7 +134,7 @@ public class DigitalWireBlock extends Block {
             Level level,
             BlockPos pos,
             Block block,
-            @Nullable net.minecraft.world.level.redstone.Orientation orientation,
+            @Nullable Orientation orientation,
             boolean movedByPiston
     ) {
         if (!level.isClientSide()) {
