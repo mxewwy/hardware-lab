@@ -1,4 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": { "all": "minecraft:block/observer_side" }
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "minecraft:block/cut_copper",
+    "up": "minecraft:block/cut_copper",
+    "north": "minecraft:block/observer_front",
+    "south": "minecraft:block/cut_copper",
+    "west": "minecraft:block/cut_copper",
+    "east": "minecraft:block/cut_copper"
+  }
 }
