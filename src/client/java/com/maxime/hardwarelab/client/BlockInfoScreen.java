@@ -1,6 +1,7 @@
 package com.maxime.hardwarelab.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -22,12 +23,13 @@ public final class BlockInfoScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent input) {
+        int keyCode = input.key();
         if (keyCode == InputConstants.KEY_H) {
             this.minecraft.gui.setScreen(new HardwareGuideScreen());
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(input);
     }
 
     @Override
