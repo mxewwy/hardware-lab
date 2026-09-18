@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/tripwire_hook"
+    "model": "hardware_lab:item/logic_probe"
   }
 }
