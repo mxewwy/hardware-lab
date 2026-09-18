@@ -143,12 +143,7 @@ public class DigitalWireBlock extends Block {
             boolean movedByPiston
     ) {
         if (!level.isClientSide()) {
-            BlockState connected = updateConnections(level, state, pos);
-            if (!connected.equals(state)) {
-                level.setBlock(pos, connected, Block.UPDATE_ALL);
-                state = connected;
-            }
-            updatePower(level, pos, state);
+            propagateNetwork(level, pos);
         }
     }
 
