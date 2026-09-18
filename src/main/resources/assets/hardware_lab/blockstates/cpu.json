@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "hardware_lab:block/cpu" },
+    "facing=east": { "model": "hardware_lab:block/cpu", "y": 90 },
+    "facing=south": { "model": "hardware_lab:block/cpu", "y": 180 },
+    "facing=west": { "model": "hardware_lab:block/cpu", "y": 270 }
+  }
+}
