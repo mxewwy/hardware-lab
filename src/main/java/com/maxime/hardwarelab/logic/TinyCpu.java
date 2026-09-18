@@ -160,6 +160,24 @@ public final class TinyCpu {
         reset();
     }
 
+    public void restore(
+            int a,
+            int b,
+            int pc,
+            boolean zero,
+            boolean carry,
+            boolean halted,
+            int output
+    ) {
+        this.a = a & 0xFF;
+        this.b = b & 0xFF;
+        this.pc = pc & 0xFF;
+        this.zero = zero;
+        this.carry = carry;
+        this.halted = halted;
+        this.output = output & 0xFF;
+    }
+
     public int a() {
         return a;
     }
