@@ -1,6 +1,7 @@
 package com.maxime.hardwarelab.client;
 
 import com.maxime.hardwarelab.HardwareLab;
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.item.ModItems;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.ClientModInitializer;
@@ -29,62 +30,42 @@ public final class HardwareLabClient implements ClientModInitializer {
             )
     );
 
-    private static final Map<String, String> CONTROLS = Map.ofEntries(
-            Map.entry("universal_logic_gate", "Right-click: next logic function"),
-            Map.entry("digital_wire", "Automatic HIGH / LOW carrier"),
-            Map.entry("redstone_input", "Reads redstone on the input face"),
-            Map.entry("redstone_output", "Drives redstone on the output face"),
-            Map.entry("clock_generator", "Right-click: change clock rate"),
-            Map.entry("clock_divider", "Right-click: change division"),
-            Map.entry("d_flip_flop", "D + CLK in, Q out"),
-            Map.entry("digital_bus", "Right-click: test pattern | Shift + right-click: width"),
-            Map.entry("bus_mux", "Right-click: width | SELECT is redstone"),
-            Map.entry("bus_splitter", "Right-click: bank | Shift + right-click: width"),
-            Map.entry("bus_merger", "Right-click: bank | Shift + right-click: width"),
-            Map.entry("bus_driver", "Side redstone input = enable"),
-            Map.entry("adc", "Redstone power -> 4-bit bus"),
-            Map.entry("dac", "4-bit bus -> redstone power"),
-            Map.entry("eight_bit_register", "Latches an 8-bit value on load/clock"),
-            Map.entry("ram_256", "Address selects byte | Shift + right-click: clear"),
-            Map.entry("rom_256", "Right-click: cycle demo pattern"),
-            Map.entry("seven_segment_display", "Displays a 4-bit hexadecimal digit"),
-            Map.entry("led_matrix", "Displays an 8-bit matrix row"),
-            Map.entry("cpu", "Right-click: program | Shift + right-click: speed"),
-            Map.entry("fpga", "Right-click: LUT mode | Shift + right-click: register"),
-            Map.entry("logic_probe", "Right-click a component: info + live readout"),
-            Map.entry("oscilloscope", "Right-click a signal source: waveform viewer")
+    private static final Map<String, Boolean> MOD_ITEMS = Map.ofEntries(
+            Map.entry("logic_probe", true), Map.entry("oscilloscope", true),
+            Map.entry("universal_logic_gate", true), Map.entry("digital_wire", true),
+            Map.entry("redstone_input", true), Map.entry("redstone_output", true),
+            Map.entry("clock_generator", true), Map.entry("clock_divider", true),
+            Map.entry("d_flip_flop", true), Map.entry("digital_bus", true),
+            Map.entry("bus_mux", true), Map.entry("bus_splitter", true),
+            Map.entry("bus_merger", true), Map.entry("bus_driver", true),
+            Map.entry("adc", true), Map.entry("dac", true),
+            Map.entry("eight_bit_register", true), Map.entry("ram_256", true),
+            Map.entry("rom_256", true), Map.entry("seven_segment_display", true),
+            Map.entry("led_matrix", true), Map.entry("cpu", true), Map.entry("fpga", true)
     );
 
     @Override
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (GUIDE_KEY.consumeClick()) {
-                if (client.player != null) {
-                    client.gui.setScreen(new HardwareGuideScreen());
-                }
+                if (client.player != null) client.gui.setScreen(new HardwareGuideScreen());
             }
         });
 
         UseBlockCallback.EVENT.register((player, level, hand, hitResult) -> {
-            if (!level.isClientSide()) {
-                return InteractionResult.PASS;
-            }
+            if (!level.isClientSide()) return InteractionResult.PASS;
 
             if (player.getItemInHand(hand).is(ModItems.OSCILLOSCOPE)) {
                 Minecraft.getInstance().gui.setScreen(
-                        new OscilloscopeScreen(hitResult.getBlockPos(), hitResult.getDirection())
-                );
+                        new OscilloscopeScreen(hitResult.getBlockPos(), hitResult.getDirection()));
                 return InteractionResult.SUCCESS;
             }
 
             if (player.getItemInHand(hand).is(ModItems.LOGIC_PROBE)) {
                 String path = BuiltInRegistries.BLOCK.getKey(
-                        level.getBlockState(hitResult.getBlockPos()).getBlock()
-                ).getPath();
-
+                        level.getBlockState(hitResult.getBlockPos()).getBlock()).getPath();
                 Minecraft.getInstance().gui.setScreen(
-                        new BlockInfoScreen(hitResult.getBlockPos(), hitResult.getDirection(), path)
-                );
+                        new BlockInfoScreen(hitResult.getBlockPos(), hitResult.getDirection(), path));
                 return InteractionResult.SUCCESS;
             }
 
@@ -93,19 +74,12 @@ public final class HardwareLabClient implements ClientModInitializer {
 
         ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipFlag, lines) -> {
             Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-            if (!HardwareLab.MOD_ID.equals(id.getNamespace())) {
-                return;
-            }
-
-            String control = CONTROLS.get(id.getPath());
-            if (control == null) {
-                return;
-            }
+            if (!HardwareLab.MOD_ID.equals(id.getNamespace()) || !MOD_ITEMS.containsKey(id.getPath())) return;
 
             lines.add(Component.literal(" "));
-            lines.add(Component.literal("Hardware Lab"));
-            lines.add(Component.literal(control));
-            lines.add(Component.literal("H = Hardware Guide"));
+            lines.add(HardwareLabLanguage.component("gui.tooltip.header"));
+            lines.add(Component.literal(HardwareLabLanguage.control(id.getPath())));
+            lines.add(HardwareLabLanguage.component("gui.tooltip.guide"));
         });
     }
 }
