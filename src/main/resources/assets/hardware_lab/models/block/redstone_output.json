@@ -1,6 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "minecraft:block/copper_block"
+    "down": "minecraft:block/target_side",
+    "up": "minecraft:block/target_side",
+    "north": "minecraft:block/target_side",
+    "south": "minecraft:block/target_side",
+    "west": "minecraft:block/target_side",
+    "east": "minecraft:block/target_side"
   }
 }
