@@ -1,7 +1,10 @@
 package com.maxime.hardwarelab.client;
 
 import com.maxime.hardwarelab.HardwareLabLanguage;
+import com.maxime.hardwarelab.block.BusOutputBlock;
 import com.maxime.hardwarelab.block.DigitalWireBlock;
+import com.maxime.hardwarelab.block.UniversalLogicGateBlock;
+import com.maxime.hardwarelab.logic.BusSignal;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -60,8 +63,11 @@ public final class BlockInfoScreen extends Screen {
         graphics.text(font, HardwareLabLanguage.text("gui.info.control"), left + 18, top + 112, 0xFF7F8B96, false);
         graphics.text(font, HardwareLabLanguage.control(path), left + 18, top + 128, 0xFFB9C2CC, false);
 
-        graphics.fill(left + 18, top + 158, right - 18, top + 160, 0xFF2C343D);
-        graphics.text(font, HardwareLabLanguage.text("gui.info.hint"), left + 18, top + 176, 0xFFB9C2CC, false);
+        graphics.text(font, HardwareLabLanguage.text("gui.info.readout"), left + 18, top + 159, 0xFF4DE38B, true);
+        graphics.text(font, liveReadout(), left + 18, top + 177, 0xFFB9C2CC, false);
+
+        graphics.fill(left + 18, top + 198, right - 18, top + 200, 0xFF2C343D);
+        graphics.text(font, HardwareLabLanguage.text("gui.info.hint"), left + 18, top + 216, 0xFFB9C2CC, false);
 
         if (path.equals("digital_wire")) {
             Level level = minecraft.level;
@@ -85,6 +91,39 @@ public final class BlockInfoScreen extends Screen {
 
         graphics.text(font, HardwareLabLanguage.text("gui.info.guide"), left + 18, bottom - 18, 0xFF7F8B96, false);
         graphics.text(font, HardwareLabLanguage.text("gui.info.close"), right - 86, bottom - 18, 0xFF7F8B96, false);
+    }
+
+    private String liveReadout() {
+        Level level = minecraft.level;
+        if (level == null) return "-";
+
+        BlockState state = level.getBlockState(targetPos);
+        if (state.getBlock() instanceof DigitalWireBlock wire) {
+            StringBuilder links = new StringBuilder();
+            addConnection(links, state, "N", DigitalWireBlock.NORTH);
+            addConnection(links, state, "E", DigitalWireBlock.EAST);
+            addConnection(links, state, "S", DigitalWireBlock.SOUTH);
+            addConnection(links, state, "W", DigitalWireBlock.WEST);
+            addConnection(links, state, "U", DigitalWireBlock.UP);
+            addConnection(links, state, "D", DigitalWireBlock.DOWN);
+            return "WIRE=" + (wire == null ? "LOW" : (state.getValue(DigitalWireBlock.POWERED) ? "HIGH" : "LOW"))
+                    + "  LINKS=" + (links.isEmpty() ? "-" : links);
+        }
+
+        if (state.getBlock() instanceof UniversalLogicGateBlock) {
+            var inputs = UniversalLogicGateBlock.getInputs(state, level, targetPos);
+            return "A=" + inputs[0].value() + "  B=" + inputs[1].value()
+                    + "  OUT=" + UniversalLogicGateBlock.evaluate(state, level, targetPos).value();
+        }
+
+        if (state.getBlock() instanceof BusOutputBlock output) {
+            BusSignal signal = output.getBusOutput(level, targetPos, state);
+            return signal == null
+                    ? "BUS=DISCONNECTED"
+                    : "WIDTH=" + signal.width().bits() + "  VALUE=0x" + signal.hex();
+        }
+
+        return "SIGNAL=" + readSignal();
     }
 
     private int readSignal() {
