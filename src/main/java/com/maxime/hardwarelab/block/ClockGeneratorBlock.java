@@ -42,8 +42,7 @@ public class ClockGeneratorBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(POWERED, RATE);
+        builder.add(FACING, POWERED, RATE);
     }
 
     @Override
