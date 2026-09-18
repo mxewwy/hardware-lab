@@ -106,7 +106,7 @@ public final class BusMergerBlock extends BaseEntityBlock implements BusOutputBl
 
         Direction facing = state.getValue(FACING);
         int value = 0;
-        value |= read(level, pos.relative(facing), facing.getOpposite()) ? 1 : 0;
+        value |= read(level, pos.relative(facing.getOpposite()), facing) ? 1 : 0;
         value |= read(level, pos.relative(facing.getCounterClockWise()), facing.getClockWise()) ? 2 : 0;
         value |= read(level, pos.relative(facing.getClockWise()), facing.getCounterClockWise()) ? 4 : 0;
         value |= read(level, pos.above(), Direction.DOWN) ? 8 : 0;
