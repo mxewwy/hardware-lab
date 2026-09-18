@@ -26,6 +26,27 @@ public final class ModBlockEntities {
     public static final BlockEntityType<BusSplitterBlockEntity> BUS_SPLITTER =
             register("bus_splitter", BusSplitterBlockEntity::new, ModBlocks.BUS_SPLITTER);
 
+    public static final BlockEntityType<EightBitRegisterBlockEntity> EIGHT_BIT_REGISTER =
+            register("eight_bit_register", EightBitRegisterBlockEntity::new, ModBlocks.EIGHT_BIT_REGISTER);
+
+    public static final BlockEntityType<Ram256BlockEntity> RAM_256 =
+            register("ram_256", Ram256BlockEntity::new, ModBlocks.RAM_256);
+
+    public static final BlockEntityType<Rom256BlockEntity> ROM_256 =
+            register("rom_256", Rom256BlockEntity::new, ModBlocks.ROM_256);
+
+    public static final BlockEntityType<SevenSegmentDisplayBlockEntity> SEVEN_SEGMENT_DISPLAY =
+            register("seven_segment_display", SevenSegmentDisplayBlockEntity::new, ModBlocks.SEVEN_SEGMENT_DISPLAY);
+
+    public static final BlockEntityType<LedMatrixBlockEntity> LED_MATRIX =
+            register("led_matrix", LedMatrixBlockEntity::new, ModBlocks.LED_MATRIX);
+
+    public static final BlockEntityType<CpuBlockEntity> CPU =
+            register("cpu", CpuBlockEntity::new, ModBlocks.CPU);
+
+    public static final BlockEntityType<FpgaBlockEntity> FPGA =
+            register("fpga", FpgaBlockEntity::new, ModBlocks.FPGA);
+
     private ModBlockEntities() {
     }
 
