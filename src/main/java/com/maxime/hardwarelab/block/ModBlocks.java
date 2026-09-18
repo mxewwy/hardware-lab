@@ -4,8 +4,9 @@ import com.maxime.hardwarelab.HardwareLab;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -33,33 +34,26 @@ public final class ModBlocks {
             Function<BlockBehaviour.Properties, Block> factory,
             BlockBehaviour.Properties properties
     ) {
-        ResourceKey<Block> blockKey = ResourceKey.create(
-                BuiltInRegistries.BLOCK.key(),
-                ResourceLocation.fromNamespaceAndPath(HardwareLab.MOD_ID, name)
-        );
+        Identifier id = Identifier.fromNamespaceAndPath(HardwareLab.MOD_ID, name);
 
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id);
         Block block = factory.apply(properties.setId(blockKey));
+        Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
 
-        ResourceKey<Item> itemKey = ResourceKey.create(
-                BuiltInRegistries.ITEM.key(),
-                ResourceLocation.fromNamespaceAndPath(HardwareLab.MOD_ID, name)
-        );
-
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
         BlockItem item = new BlockItem(
                 block,
                 new Item.Properties()
                         .setId(itemKey)
                         .useBlockDescriptionPrefix()
         );
-
-        Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
         Registry.register(BuiltInRegistries.ITEM, itemKey, item);
 
         return block;
     }
 
     public static void initialize() {
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.REDSTONE).register(entries ->
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(entries ->
                 entries.accept(UNIVERSAL_LOGIC_GATE.asItem())
         );
     }
