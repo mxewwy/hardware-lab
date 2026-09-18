@@ -40,16 +40,17 @@ public final class DigitalBusBlockEntity extends BlockEntity {
     }
 
     public void cycleTestPattern() {
+        int mask = width.mask();
         int[] patterns = {
                 0,
                 1,
-                0xF,
-                0x55,
-                0xAA,
-                width.mask()
+                0xF & mask,
+                0x55 & mask,
+                0xAA & mask,
+                mask
         };
 
-        int current = manualValue & width.mask();
+        int current = manualValue & mask;
         int nextIndex = 0;
 
         for (int i = 0; i < patterns.length; i++) {
