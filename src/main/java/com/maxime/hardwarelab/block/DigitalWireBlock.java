@@ -138,6 +138,11 @@ public class DigitalWireBlock extends Block {
             boolean movedByPiston
     ) {
         if (!level.isClientSide()) {
+            BlockState connected = updateConnections(level, state, pos);
+            if (!connected.equals(state)) {
+                level.setBlock(pos, connected, Block.UPDATE_ALL);
+                state = connected;
+            }
             updatePower(level, pos, state);
         }
     }
@@ -179,7 +184,30 @@ public class DigitalWireBlock extends Block {
             BlockPos pos,
             CollisionContext context
     ) {
-        return Shapes.empty();
+        return shapeForState(state);
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(
+            BlockState state,
+            BlockGetter level,
+            BlockPos pos,
+            CollisionContext context
+    ) {
+        return shapeForState(state);
+    }
+
+    private static VoxelShape shapeForState(BlockState state) {
+        VoxelShape shape = Shapes.box(6.0 / 16.0, 0.0, 6.0 / 16.0, 10.0 / 16.0, 2.0 / 16.0, 10.0 / 16.0);
+
+        if (state.getValue(NORTH)) shape = Shapes.or(shape, Shapes.box(7.0 / 16.0, 0.0, 0.0, 9.0 / 16.0, 2.0 / 16.0, 10.0 / 16.0));
+        if (state.getValue(SOUTH)) shape = Shapes.or(shape, Shapes.box(7.0 / 16.0, 0.0, 6.0 / 16.0, 9.0 / 16.0, 2.0 / 16.0, 1.0));
+        if (state.getValue(EAST))  shape = Shapes.or(shape, Shapes.box(6.0 / 16.0, 0.0, 7.0 / 16.0, 1.0, 2.0 / 16.0, 9.0 / 16.0));
+        if (state.getValue(WEST))  shape = Shapes.or(shape, Shapes.box(0.0, 0.0, 7.0 / 16.0, 10.0 / 16.0, 2.0 / 16.0, 9.0 / 16.0));
+        if (state.getValue(UP))    shape = Shapes.or(shape, Shapes.box(6.0 / 16.0, 2.0 / 16.0, 6.0 / 16.0, 10.0 / 16.0, 1.0, 10.0 / 16.0));
+        if (state.getValue(DOWN))  shape = Shapes.or(shape, Shapes.box(6.0 / 16.0, 0.0, 6.0 / 16.0, 10.0 / 16.0, 14.0 / 16.0, 10.0 / 16.0));
+
+        return shape;
     }
 
     private static BlockState updateConnections(BlockGetter level, BlockState state, BlockPos pos) {
