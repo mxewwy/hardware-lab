@@ -150,4 +150,22 @@ public class ClockDividerBlock extends BaseEntityBlock {
 
         return DivisionFactor.DIVIDE_BY_2.factor();
     }
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.world.phys.shapes.CollisionContext context) {
+        return HardwareShapes.COMPONENT;
+    }
+
 }
