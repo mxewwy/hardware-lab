@@ -35,6 +35,22 @@ public final class ModBlocks {
                     .noOcclusion()
     );
 
+    public static final Block REDSTONE_INPUT = register(
+            "redstone_input",
+            RedstoneInputBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(1.5F)
+                    .sound(SoundType.METAL)
+    );
+
+    public static final Block REDSTONE_OUTPUT = register(
+            "redstone_output",
+            RedstoneOutputBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(1.5F)
+                    .sound(SoundType.METAL)
+    );
+
     private ModBlocks() {
     }
 
@@ -65,6 +81,8 @@ public final class ModBlocks {
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(entries -> {
             entries.accept(UNIVERSAL_LOGIC_GATE.asItem());
             entries.accept(DIGITAL_WIRE.asItem());
+            entries.accept(REDSTONE_INPUT.asItem());
+            entries.accept(REDSTONE_OUTPUT.asItem());
         });
     }
 }
