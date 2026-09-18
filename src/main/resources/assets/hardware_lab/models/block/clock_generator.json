@@ -1,6 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "minecraft:block/redstone_block"
+    "down": "minecraft:block/gold_block",
+    "up": "minecraft:block/gold_block",
+    "north": "minecraft:block/observer_front",
+    "south": "minecraft:block/gold_block",
+    "west": "minecraft:block/gold_block",
+    "east": "minecraft:block/gold_block"
   }
 }
