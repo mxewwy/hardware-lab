@@ -1,11 +1,11 @@
 {
-  "parent": "minecraft:block/cube",
+  "parent": "hardware_lab:block/compute",
   "textures": {
-    "down": "minecraft:block/purple_concrete",
-    "up": "minecraft:block/purple_concrete",
-    "north": "minecraft:block/observer_front",
-    "south": "minecraft:block/purple_concrete",
-    "west": "minecraft:block/purple_concrete",
-    "east": "minecraft:block/purple_concrete"
+    "down": "hardware_lab:block/compute",
+    "up": "hardware_lab:block/compute",
+    "north": "hardware_lab:block/compute",
+    "south": "hardware_lab:block/compute",
+    "west": "hardware_lab:block/compute",
+    "east": "hardware_lab:block/compute"
   }
 }
