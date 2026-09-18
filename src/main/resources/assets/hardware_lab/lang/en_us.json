@@ -1,4 +1,5 @@
 {
   "block.hardware_lab.universal_logic_gate": "Universal Logic Gate",
-  "block.hardware_lab.digital_wire": "Digital Wire"
+  "block.hardware_lab.digital_wire": "Digital Wire",
+  "item.hardware_lab.logic_probe": "Logic Probe"
 }

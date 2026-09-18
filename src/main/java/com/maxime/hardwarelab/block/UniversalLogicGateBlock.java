@@ -108,7 +108,7 @@ public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
         notifyOutputNeighbors(level, pos, state.getValue(FACING));
     }
 
-    private static Signal evaluate(BlockState state, BlockGetter level, BlockPos pos) {
+    public static Signal evaluate(BlockState state, BlockGetter level, BlockPos pos) {
         Direction facing = state.getValue(FACING);
         Direction inputA = facing.getClockWise();
         Direction inputB = facing.getCounterClockWise();
@@ -117,6 +117,17 @@ public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
         Signal b = readSignal(level, pos.relative(inputB), inputB.getOpposite());
 
         return state.getValue(GATE_TYPE).function().evaluate(new Signal[]{a, b});
+    }
+
+    public static Signal[] getInputs(BlockState state, BlockGetter level, BlockPos pos) {
+        Direction facing = state.getValue(FACING);
+        Direction inputA = facing.getClockWise();
+        Direction inputB = facing.getCounterClockWise();
+
+        return new Signal[]{
+                readSignal(level, pos.relative(inputA), inputA.getOpposite()),
+                readSignal(level, pos.relative(inputB), inputB.getOpposite())
+        };
     }
 
     private static Signal readSignal(BlockGetter level, BlockPos sourcePos, Direction towardGate) {

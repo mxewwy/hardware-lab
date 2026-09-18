@@ -13,19 +13,20 @@ Hardware Lab brings digital electronics into the Minecraft world: logic gates, d
 - binary LOW / HIGH signal model
 - reusable logic functions
 - AND, OR, XOR, NAND, NOR, XNOR, NOT and BUFFER
-- Universal Logic Gate block
-- Universal Logic Gate redstone input/output behavior
+- Universal Logic Gate block with configurable gate type
+- Universal Logic Gate redstone I/O behavior
 - Digital Wire with horizontal and vertical connections
 - Digital Wire signal propagation
+- Logic Probe with basic block and signal inspection
 
 ### Roadmap
 
 - [x] Core digital signal model
 - [x] Universal Logic Gate
 - [x] Digital Wire
+- [x] Logic Probe
 - [ ] Dedicated Redstone Input
 - [ ] Dedicated Redstone Output
-- [ ] Logic Probe
 - [ ] Oscilloscope
 - [ ] Clock and sequential logic
 - [ ] Buses
