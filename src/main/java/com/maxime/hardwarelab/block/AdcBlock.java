@@ -27,7 +27,7 @@ public final class AdcBlock extends HorizontalDirectionalBlock implements BusOut
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
+        builder.add(FACING);
     }
 
     @Override
