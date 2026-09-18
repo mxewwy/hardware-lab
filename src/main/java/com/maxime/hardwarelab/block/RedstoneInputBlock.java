@@ -36,8 +36,7 @@ public class RedstoneInputBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(POWERED);
+        builder.add(FACING, POWERED);
     }
 
     @Override
