@@ -49,11 +49,6 @@ public final class LogicProbeItem extends Item {
     }
 
     @Override
-    public Component getName(net.minecraft.world.item.ItemStack stack) {
-        return com.maxime.hardwarelab.HardwareLabLanguage.component("item.logic_probe");
-    }
-
-    @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         Player player = context.getPlayer();
