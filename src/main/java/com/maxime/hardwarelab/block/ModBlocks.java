@@ -51,6 +51,14 @@ public final class ModBlocks {
                     .sound(SoundType.METAL)
     );
 
+    public static final Block CLOCK_GENERATOR = register(
+            "clock_generator",
+            ClockGeneratorBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(1.5F)
+                    .sound(SoundType.METAL)
+    );
+
     private ModBlocks() {
     }
 
@@ -83,6 +91,7 @@ public final class ModBlocks {
             entries.accept(DIGITAL_WIRE.asItem());
             entries.accept(REDSTONE_INPUT.asItem());
             entries.accept(REDSTONE_OUTPUT.asItem());
+            entries.accept(CLOCK_GENERATOR.asItem());
         });
     }
 }

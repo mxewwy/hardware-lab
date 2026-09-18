@@ -18,6 +18,7 @@ Hardware Lab brings digital electronics into the Minecraft world: logic gates, d
 - Dedicated Redstone Input and Redstone Output adapters
 - Logic Probe for instantaneous signal inspection
 - Oscilloscope with a live 96-sample waveform
+- Clock Generator with 1 / 2 / 4 / 8 tick intervals
 
 ### Roadmap
 
@@ -27,7 +28,9 @@ Hardware Lab brings digital electronics into the Minecraft world: logic gates, d
 - [x] Logic Probe
 - [x] Redstone adapters
 - [x] Oscilloscope
-- [ ] Clock and sequential logic
+- [x] Clock Generator
+- [ ] Clock Divider
+- [ ] Sequential logic
 - [ ] Buses
 - [ ] RAM / ROM
 - [ ] Displays

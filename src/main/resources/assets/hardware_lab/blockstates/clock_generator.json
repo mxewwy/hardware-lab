@@ -1,0 +1,39 @@
+{
+  "variants": {
+    "facing=north,powered=false,rate=every_tick": { "model": "hardware_lab:block/clock_generator" },
+    "facing=north,powered=true,rate=every_tick": { "model": "hardware_lab:block/clock_generator" },
+    "facing=north,powered=false,rate=every_2_ticks": { "model": "hardware_lab:block/clock_generator" },
+    "facing=north,powered=true,rate=every_2_ticks": { "model": "hardware_lab:block/clock_generator" },
+    "facing=north,powered=false,rate=every_4_ticks": { "model": "hardware_lab:block/clock_generator" },
+    "facing=north,powered=true,rate=every_4_ticks": { "model": "hardware_lab:block/clock_generator" },
+    "facing=north,powered=false,rate=every_8_ticks": { "model": "hardware_lab:block/clock_generator" },
+    "facing=north,powered=true,rate=every_8_ticks": { "model": "hardware_lab:block/clock_generator" },
+
+    "facing=east,powered=false,rate=every_tick": { "model": "hardware_lab:block/clock_generator", "y": 90 },
+    "facing=east,powered=true,rate=every_tick": { "model": "hardware_lab:block/clock_generator", "y": 90 },
+    "facing=east,powered=false,rate=every_2_ticks": { "model": "hardware_lab:block/clock_generator", "y": 90 },
+    "facing=east,powered=true,rate=every_2_ticks": { "model": "hardware_lab:block/clock_generator", "y": 90 },
+    "facing=east,powered=false,rate=every_4_ticks": { "model": "hardware_lab:block/clock_generator", "y": 90 },
+    "facing=east,powered=true,rate=every_4_ticks": { "model": "hardware_lab:block/clock_generator", "y": 90 },
+    "facing=east,powered=false,rate=every_8_ticks": { "model": "hardware_lab:block/clock_generator", "y": 90 },
+    "facing=east,powered=true,rate=every_8_ticks": { "model": "hardware_lab:block/clock_generator", "y": 90 },
+
+    "facing=south,powered=false,rate=every_tick": { "model": "hardware_lab:block/clock_generator", "y": 180 },
+    "facing=south,powered=true,rate=every_tick": { "model": "hardware_lab:block/clock_generator", "y": 180 },
+    "facing=south,powered=false,rate=every_2_ticks": { "model": "hardware_lab:block/clock_generator", "y": 180 },
+    "facing=south,powered=true,rate=every_2_ticks": { "model": "hardware_lab:block/clock_generator", "y": 180 },
+    "facing=south,powered=false,rate=every_4_ticks": { "model": "hardware_lab:block/clock_generator", "y": 180 },
+    "facing=south,powered=true,rate=every_4_ticks": { "model": "hardware_lab:block/clock_generator", "y": 180 },
+    "facing=south,powered=false,rate=every_8_ticks": { "model": "hardware_lab:block/clock_generator", "y": 180 },
+    "facing=south,powered=true,rate=every_8_ticks": { "model": "hardware_lab:block/clock_generator", "y": 180 },
+
+    "facing=west,powered=false,rate=every_tick": { "model": "hardware_lab:block/clock_generator", "y": 270 },
+    "facing=west,powered=true,rate=every_tick": { "model": "hardware_lab:block/clock_generator", "y": 270 },
+    "facing=west,powered=false,rate=every_2_ticks": { "model": "hardware_lab:block/clock_generator", "y": 270 },
+    "facing=west,powered=true,rate=every_2_ticks": { "model": "hardware_lab:block/clock_generator", "y": 270 },
+    "facing=west,powered=false,rate=every_4_ticks": { "model": "hardware_lab:block/clock_generator", "y": 270 },
+    "facing=west,powered=true,rate=every_4_ticks": { "model": "hardware_lab:block/clock_generator", "y": 270 },
+    "facing=west,powered=false,rate=every_8_ticks": { "model": "hardware_lab:block/clock_generator", "y": 270 },
+    "facing=west,powered=true,rate=every_8_ticks": { "model": "hardware_lab:block/clock_generator", "y": 270 }
+  }
+}

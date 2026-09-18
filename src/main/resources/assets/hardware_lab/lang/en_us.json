@@ -3,6 +3,7 @@
   "block.hardware_lab.digital_wire": "Digital Wire",
   "block.hardware_lab.redstone_input": "Redstone Input",
   "block.hardware_lab.redstone_output": "Redstone Output",
+  "block.hardware_lab.clock_generator": "Clock Generator",
   "item.hardware_lab.logic_probe": "Logic Probe",
   "item.hardware_lab.oscilloscope": "Oscilloscope"
 }
