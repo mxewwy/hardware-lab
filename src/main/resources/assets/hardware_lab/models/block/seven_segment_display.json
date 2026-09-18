@@ -1,4 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": { "all": "minecraft:block/redstone_lamp" }
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "minecraft:block/green_concrete",
+    "up": "minecraft:block/green_concrete",
+    "north": "minecraft:block/redstone_lamp",
+    "south": "minecraft:block/green_concrete",
+    "west": "minecraft:block/green_concrete",
+    "east": "minecraft:block/green_concrete"
+  }
 }
