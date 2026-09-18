@@ -1,6 +1,11 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "minecraft:block/redstone_block"
+    "down": "minecraft:block/amethyst_block",
+    "up": "minecraft:block/amethyst_block",
+    "north": "minecraft:block/observer_front",
+    "south": "minecraft:block/amethyst_block",
+    "west": "minecraft:block/amethyst_block",
+    "east": "minecraft:block/amethyst_block"
   }
 }
