@@ -1,8 +1,10 @@
 package com.maxime.hardwarelab.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 
 public final class HardwareGuideScreen extends Screen {
@@ -48,7 +50,9 @@ public final class HardwareGuideScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent input) {
+        int keyCode = input.key();
+
         if (keyCode == InputConstants.KEY_LEFT) {
             this.page = (this.page + PAGES.length - 1) % PAGES.length;
             return true;
@@ -57,7 +61,7 @@ public final class HardwareGuideScreen extends Screen {
             this.page = (this.page + 1) % PAGES.length;
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(input);
     }
 
     @Override
@@ -84,7 +88,7 @@ public final class HardwareGuideScreen extends Screen {
         graphics.text(this.font, "PAGE " + (this.page + 1) + " / " + PAGES.length, right - 72, top + 15, 0xFF7F8B96, false);
 
         Entry[] entries = PAGES[this.page];
-        int columns = entries.length > 8 ? 2 : 2;
+        int columns = 2;
         int rows = (entries.length + columns - 1) / columns;
         int columnWidth = (panelWidth - 44) / columns;
 
