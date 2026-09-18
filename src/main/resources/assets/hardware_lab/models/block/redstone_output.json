@@ -1,11 +1,11 @@
 {
-  "parent": "minecraft:block/cube",
+  "parent": "hardware_lab:block/io",
   "textures": {
-    "down": "minecraft:block/target_side",
-    "up": "minecraft:block/target_side",
-    "north": "minecraft:block/target_side",
-    "south": "minecraft:block/target_side",
-    "west": "minecraft:block/target_side",
-    "east": "minecraft:block/target_side"
+    "down": "hardware_lab:block/io",
+    "up": "hardware_lab:block/io",
+    "north": "hardware_lab:block/io",
+    "south": "hardware_lab:block/io",
+    "west": "hardware_lab:block/io",
+    "east": "hardware_lab:block/io"
   }
 }
