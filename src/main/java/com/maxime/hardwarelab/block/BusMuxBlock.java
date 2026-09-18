@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.block.entity.BusMuxBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.BusMuxLogic;
@@ -75,7 +76,7 @@ public class BusMuxBlock extends BaseEntityBlock implements BusOutputBlock {
 
         entity.cycleWidth();
         player.sendOverlayMessage(Component.literal(
-                "Bus MUX | WIDTH=" + entity.width().bits()
+                HardwareLabLanguage.blockName("bus_mux") + " | WIDTH=" + entity.width().bits()
                         + " | SELECT=REDSTONE"
         ));
         level.updateNeighborsAt(pos, this);
