@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "hardware_lab:block/digital_bus" },
+    "facing=east": { "model": "hardware_lab:block/digital_bus", "y": 90 },
+    "facing=south": { "model": "hardware_lab:block/digital_bus", "y": 180 },
+    "facing=west": { "model": "hardware_lab:block/digital_bus", "y": 270 }
+  }
+}
