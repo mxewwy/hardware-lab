@@ -10,4 +10,8 @@ public interface BusOutputBlock {
     BusSignal getBusOutput(BlockGetter level, BlockPos pos, BlockState state);
 
     Direction getBusOutputDirection(BlockState state);
+
+    default boolean isBusDriving(BlockGetter level, BlockPos pos, BlockState state) {
+        return true;
+    }
 }
