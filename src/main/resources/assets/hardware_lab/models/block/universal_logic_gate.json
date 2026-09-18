@@ -1,11 +1,11 @@
 {
-  "parent": "minecraft:block/cube",
+  "parent": "hardware_lab:block/logic",
   "textures": {
-    "down": "minecraft:block/iron_block",
-    "up": "minecraft:block/iron_block",
-    "north": "minecraft:block/observer_front",
-    "south": "minecraft:block/iron_block",
-    "west": "minecraft:block/iron_block",
-    "east": "minecraft:block/iron_block"
+    "down": "hardware_lab:block/logic",
+    "up": "hardware_lab:block/logic",
+    "north": "hardware_lab:block/logic",
+    "south": "hardware_lab:block/logic",
+    "west": "hardware_lab:block/logic",
+    "east": "hardware_lab:block/logic"
   }
 }
