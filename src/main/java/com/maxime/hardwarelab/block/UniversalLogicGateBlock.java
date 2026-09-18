@@ -1,11 +1,14 @@
 package com.maxime.hardwarelab.block;
 
 import com.maxime.hardwarelab.logic.GateType;
+import com.maxime.hardwarelab.logic.Signal;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -24,7 +27,7 @@ public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
     public UniversalLogicGateBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState()
-                .setValue(FACING, net.minecraft.core.Direction.NORTH)
+                .setValue(FACING, Direction.NORTH)
                 .setValue(GATE_TYPE, GateType.AND));
     }
 
@@ -51,6 +54,7 @@ public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
 
         if (!level.isClientSide()) {
             level.setBlockAndUpdate(pos, state.setValue(GATE_TYPE, next));
+            notifyOutputNeighbors(level, pos, state.getValue(FACING));
         }
 
         if (level.isClientSide()) {
@@ -58,5 +62,72 @@ public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
         }
 
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public boolean isSignalSource(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getSignal(
+            BlockState state,
+            BlockGetter level,
+            BlockPos pos,
+            Direction direction
+    ) {
+        if (direction != state.getValue(FACING)) {
+            return 0;
+        }
+
+        return evaluate(state, level, pos).isHigh() ? 15 : 0;
+    }
+
+    @Override
+    protected int getDirectSignal(
+            BlockState state,
+            BlockGetter level,
+            BlockPos pos,
+            Direction direction
+    ) {
+        return getSignal(state, level, pos, direction);
+    }
+
+    @Override
+    protected void neighborChanged(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Block block,
+            BlockPos neighborPos,
+            boolean movedByPiston
+    ) {
+        super.neighborChanged(state, level, pos, block, neighborPos, movedByPiston);
+
+        Direction facing = state.getValue(FACING);
+        if (neighborPos.equals(pos.relative(facing.getClockWise()))
+                || neighborPos.equals(pos.relative(facing.getCounterClockWise()))) {
+            notifyOutputNeighbors(level, pos, facing);
+        }
+    }
+
+    private static Signal evaluate(BlockState state, BlockGetter level, BlockPos pos) {
+        Direction facing = state.getValue(FACING);
+        Direction inputA = facing.getClockWise();
+        Direction inputB = facing.getCounterClockWise();
+
+        Signal a = readSignal(level, pos.relative(inputA), inputA.getOpposite());
+        Signal b = readSignal(level, pos.relative(inputB), inputB.getOpposite());
+
+        return state.getValue(GATE_TYPE).function().evaluate(new Signal[]{a, b});
+    }
+
+    private static Signal readSignal(BlockGetter level, BlockPos sourcePos, Direction towardGate) {
+        return Signal.of(level.getSignal(sourcePos, towardGate) > 0);
+    }
+
+    private static void notifyOutputNeighbors(Level level, BlockPos pos, Direction facing) {
+        level.updateNeighborsAt(pos, ModBlocks.UNIVERSAL_LOGIC_GATE);
+        level.updateNeighborsAt(pos.relative(facing), ModBlocks.UNIVERSAL_LOGIC_GATE);
     }
 }
