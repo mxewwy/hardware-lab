@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "hardware_lab:block/eight_bit_register" },
+    "facing=east": { "model": "hardware_lab:block/eight_bit_register", "y": 90 },
+    "facing=south": { "model": "hardware_lab:block/eight_bit_register", "y": 180 },
+    "facing=west": { "model": "hardware_lab:block/eight_bit_register", "y": 270 }
+  }
+}
