@@ -1,11 +1,11 @@
 {
-  "parent": "minecraft:block/cube",
+  "parent": "hardware_lab:block/memory",
   "textures": {
-    "down": "minecraft:block/magenta_concrete",
-    "up": "minecraft:block/magenta_concrete",
-    "north": "minecraft:block/observer_front",
-    "south": "minecraft:block/magenta_concrete",
-    "west": "minecraft:block/magenta_concrete",
-    "east": "minecraft:block/magenta_concrete"
+    "down": "hardware_lab:block/memory",
+    "up": "hardware_lab:block/memory",
+    "north": "hardware_lab:block/memory",
+    "south": "hardware_lab:block/memory",
+    "west": "hardware_lab:block/memory",
+    "east": "hardware_lab:block/memory"
   }
 }
