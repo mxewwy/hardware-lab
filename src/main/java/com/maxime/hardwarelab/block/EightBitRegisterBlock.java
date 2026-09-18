@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.block.entity.EightBitRegisterBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.BusSignal;
