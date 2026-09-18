@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.state.StateDefinition;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
 public final class Ram256Block extends BaseEntityBlock implements BusOutputBlock {
@@ -105,10 +105,13 @@ public final class Ram256Block extends BaseEntityBlock implements BusOutputBlock
         boolean writeEnable = writeState.getSignal(level, writePos, writeDirection.getOpposite()) > 0;
 
         if (writeEnable && data != null) {
-            getEntity(level, pos).write(
-                    readAddress(level, pos, facing),
-                    data.resized(BusWidth.BITS_8).value()
-            );
+            Ram256BlockEntity entity = getEntity(level, pos);
+            if (entity != null) {
+                entity.write(
+                        readAddress(level, pos, facing),
+                        data.resized(BusWidth.BITS_8).value()
+                );
+            }
         }
 
         level.updateNeighborsAt(pos, this);
