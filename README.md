@@ -19,6 +19,9 @@ Hardware Lab brings digital electronics into the Minecraft world: logic gates, d
 - Logic Probe for instantaneous signal inspection
 - Oscilloscope with a live 96-sample waveform
 - Clock Generator with 1 / 2 / 4 / 8 tick intervals
+- Clock Divider with divide-by-2 / 4 / 8 / 16
+- D Flip-Flop with rising-edge state storage
+- Register logic primitive for upcoming bus integration
 
 ### Roadmap
 
@@ -29,13 +32,37 @@ Hardware Lab brings digital electronics into the Minecraft world: logic gates, d
 - [x] Redstone adapters
 - [x] Oscilloscope
 - [x] Clock Generator
-- [ ] Clock Divider
-- [ ] Sequential logic
-- [ ] Buses
+- [x] Clock Divider
+- [x] D Flip-Flop
+- [x] Register primitive
+- [ ] Bus / Bus Splitter / MUX
+- [ ] 8-bit Register block
 - [ ] RAM / ROM
 - [ ] Displays
 - [ ] CPU
 - [ ] FPGA
+
+## Port map
+
+### D Flip-Flop
+
+Relative to the block's facing direction:
+
+- front: Q
+- front-left: /Q
+- back: D
+- front-right: CLK
+
+The flip-flop captures D on the rising edge of CLK.
+
+### Clock Divider
+
+Relative to the block's facing direction:
+
+- back: clock input
+- front: divided clock output
+
+Right-click cycles DIV2, DIV4, DIV8 and DIV16.
 
 ## Design principle
 
@@ -43,7 +70,7 @@ Minecraft redstone is an I/O interface, not the foundation of the digital system
 
 Inside Hardware Lab, signals and connections are represented by the mod's own digital-electronics model. Redstone connects that model to the Minecraft world.
 
-The first implementation intentionally keeps the wire network lightweight and block-based. The architecture can later evolve toward explicit ports, buses and network evaluation without changing the public concept of a digital wire.
+The current sequential blocks keep state in Block Entities instead of inflating block-state variants. This gives persistent digital state without creating hundreds of visual block-state combinations.
 
 ## Development
 

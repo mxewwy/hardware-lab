@@ -4,6 +4,8 @@
   "block.hardware_lab.redstone_input": "Redstone Input",
   "block.hardware_lab.redstone_output": "Redstone Output",
   "block.hardware_lab.clock_generator": "Clock Generator",
+  "block.hardware_lab.clock_divider": "Clock Divider",
+  "block.hardware_lab.d_flip_flop": "D Flip-Flop",
   "item.hardware_lab.logic_probe": "Logic Probe",
   "item.hardware_lab.oscilloscope": "Oscilloscope"
 }

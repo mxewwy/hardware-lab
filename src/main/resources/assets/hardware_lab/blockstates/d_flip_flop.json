@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "hardware_lab:block/d_flip_flop" },
+    "facing=east": { "model": "hardware_lab:block/d_flip_flop", "y": 90 },
+    "facing=south": { "model": "hardware_lab:block/d_flip_flop", "y": 180 },
+    "facing=west": { "model": "hardware_lab:block/d_flip_flop", "y": 270 }
+  }
+}
