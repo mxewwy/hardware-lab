@@ -1,3 +1,4 @@
 {
-  "block.hardware_lab.universal_logic_gate": "Universal Logic Gate"
+  "block.hardware_lab.universal_logic_gate": "Universal Logic Gate",
+  "block.hardware_lab.digital_wire": "Digital Wire"
 }

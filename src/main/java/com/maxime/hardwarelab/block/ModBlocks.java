@@ -26,6 +26,15 @@ public final class ModBlocks {
                     .requiresCorrectToolForDrops()
     );
 
+    public static final Block DIGITAL_WIRE = register(
+            "digital_wire",
+            DigitalWireBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(0.2F)
+                    .sound(SoundType.COPPER)
+                    .noOcclusion()
+    );
+
     private ModBlocks() {
     }
 
@@ -53,8 +62,9 @@ public final class ModBlocks {
     }
 
     public static void initialize() {
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(entries ->
-                entries.accept(UNIVERSAL_LOGIC_GATE.asItem())
-        );
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(entries -> {
+            entries.accept(UNIVERSAL_LOGIC_GATE.asItem());
+            entries.accept(DIGITAL_WIRE.asItem());
+        });
     }
 }

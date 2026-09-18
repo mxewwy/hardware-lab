@@ -8,21 +8,23 @@ Hardware Lab brings digital electronics into the Minecraft world: logic gates, d
 
 **Version:** 0.1.0 — Digital Logic
 
-The project is currently establishing its core digital-logic model.
-
-### Implemented
+### Working
 
 - binary LOW / HIGH signal model
 - reusable logic functions
 - AND, OR, XOR, NAND, NOR, XNOR, NOT and BUFFER
-- universal gate type model
+- Universal Logic Gate block
+- Universal Logic Gate redstone input/output behavior
+- Digital Wire with horizontal and vertical connections
+- Digital Wire signal propagation
 
 ### Roadmap
 
-- [ ] Universal Logic Gate block
-- [ ] Digital Wire
-- [ ] Redstone Input
-- [ ] Redstone Output
+- [x] Core digital signal model
+- [x] Universal Logic Gate
+- [x] Digital Wire
+- [ ] Dedicated Redstone Input
+- [ ] Dedicated Redstone Output
 - [ ] Logic Probe
 - [ ] Oscilloscope
 - [ ] Clock and sequential logic
@@ -37,6 +39,8 @@ The project is currently establishing its core digital-logic model.
 Minecraft redstone is an I/O interface, not the foundation of the digital system.
 
 Inside Hardware Lab, signals and connections are represented by the mod's own digital-electronics model. Redstone connects that model to the Minecraft world.
+
+The first implementation intentionally keeps the wire network lightweight and block-based. The architecture can later evolve toward explicit ports, buses and network evaluation without changing the public concept of a digital wire.
 
 ## Development
 

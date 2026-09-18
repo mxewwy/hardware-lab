@@ -1,0 +1,19 @@
+{
+  "textures": {
+    "texture": "minecraft:block/redstone_block"
+  },
+  "elements": [
+    {
+      "from": [7, 0, 6],
+      "to": [9, 2, 16],
+      "faces": {
+        "down": { "texture": "#texture" },
+        "up": { "texture": "#texture" },
+        "north": { "texture": "#texture" },
+        "south": { "texture": "#texture" },
+        "west": { "texture": "#texture" },
+        "east": { "texture": "#texture" }
+      }
+    }
+  ]
+}
