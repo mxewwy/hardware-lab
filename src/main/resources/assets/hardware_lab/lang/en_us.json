@@ -9,6 +9,13 @@
   "block.hardware_lab.digital_bus": "Digital Bus",
   "block.hardware_lab.bus_mux": "Bus MUX",
   "block.hardware_lab.bus_splitter": "Bus Splitter",
+  "block.hardware_lab.eight_bit_register": "8-bit Register",
+  "block.hardware_lab.ram_256": "RAM-256",
+  "block.hardware_lab.rom_256": "ROM-256",
+  "block.hardware_lab.seven_segment_display": "7-Segment Display",
+  "block.hardware_lab.led_matrix": "8x8 LED Matrix",
+  "block.hardware_lab.cpu": "8-bit CPU",
+  "block.hardware_lab.fpga": "FPGA 4-LUT",
   "item.hardware_lab.logic_probe": "Logic Probe",
   "item.hardware_lab.oscilloscope": "Oscilloscope"
 }
