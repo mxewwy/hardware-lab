@@ -75,7 +75,7 @@ public final class HardwareGuideScreen extends Screen {
         int left = (this.width - panelWidth) / 2;
         int top = 22;
         int right = left + panelWidth;
-        int bottom = Math.min(this.height - 22, top + 396);
+        int bottom = Math.min(this.height - 22, top + 320);
 
         graphics.fill(left, top, right, bottom, 0xF013171C);
         graphics.fill(left, top, right, top + 3, 0xFF4DE38B);
@@ -83,19 +83,27 @@ public final class HardwareGuideScreen extends Screen {
         graphics.text(this.font, "HARDWARE LAB // GUIDE", left + 18, top + 15, 0xFFFFFFFF, true);
         graphics.text(this.font, "PAGE " + (this.page + 1) + " / " + PAGES.length, right - 72, top + 15, 0xFF7F8B96, false);
 
-        int y = top + 45;
-        for (Entry entry : PAGES[this.page]) {
-            graphics.text(this.font, entry.name, left + 18, y, 0xFFFFFFFF, true);
-            graphics.text(this.font, entry.purpose, left + 18, y + 12, 0xFFB9C2CC, false);
-            graphics.text(this.font, entry.control, left + 18, y + 24, 0xFF7F8B96, false);
-            y += 47;
+        Entry[] entries = PAGES[this.page];
+        int columns = entries.length > 8 ? 2 : 2;
+        int rows = (entries.length + columns - 1) / columns;
+        int columnWidth = (panelWidth - 44) / columns;
+
+        for (int i = 0; i < entries.length; i++) {
+            Entry entry = entries[i];
+            int column = i / rows;
+            int row = i % rows;
+            int x = left + 18 + column * columnWidth;
+            int y = top + 45 + row * 43;
+
+            graphics.text(this.font, entry.name, x, y, 0xFFFFFFFF, true);
+            graphics.text(this.font, entry.purpose, x, y + 12, 0xFFB9C2CC, false);
+            graphics.text(this.font, entry.control, x, y + 24, 0xFF7F8B96, false);
         }
 
-        graphics.fill(left + 16, bottom - 34, right - 16, bottom - 33, 0xFF2C343D);
-        graphics.text(this.font, "H", left + 18, bottom - 24, 0xFF4DE38B, true);
-        graphics.text(this.font, "GUIDE", left + 31, bottom - 24, 0xFF7F8B96, false);
-        graphics.text(this.font, "< / >", right - 116, bottom - 24, 0xFFB9C2CC, false);
-        graphics.text(this.font, "CHANGE PAGE", right - 75, bottom - 24, 0xFF7F8B96, false);
-        graphics.text(this.font, "ESC", right - 45, bottom - 10, 0xFF7F8B96, false);
+        graphics.fill(left + 16, bottom - 30, right - 16, bottom - 29, 0xFF2C343D);
+        graphics.text(this.font, "<", left + 18, bottom - 20, 0xFFB9C2CC, true);
+        graphics.text(this.font, "LEFT / RIGHT", left + 31, bottom - 20, 0xFF7F8B96, false);
+        graphics.text(this.font, "PAGE", left + 108, bottom - 20, 0xFF7F8B96, false);
+        graphics.text(this.font, "ESC", right - 45, bottom - 20, 0xFF7F8B96, false);
     }
 }
