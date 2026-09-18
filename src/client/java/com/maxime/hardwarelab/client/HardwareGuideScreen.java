@@ -90,12 +90,26 @@ public final class HardwareGuideScreen extends Screen {
         drawStep(graphics, left, top + 150, "gui.guide.step3", "gui.guide.step3b");
         drawStep(graphics, left, top + 199, "gui.guide.step4", "gui.guide.step4b");
 
-        graphics.fill(left + 18, top + 245, left + 370, top + 247, 0xFF2C343D);
-        graphics.text(font, HardwareLabLanguage.text("gui.guide.rules"), left + 18, top + 259, 0xFFFFFFFF, true);
-        graphics.text(font, HardwareLabLanguage.text("gui.guide.rule1"), left + 18, top + 276, 0xFFB9C2CC, false);
-        graphics.text(font, HardwareLabLanguage.text("gui.guide.rule2"), left + 18, top + 292, 0xFFB9C2CC, false);
-        graphics.text(font, HardwareLabLanguage.text("gui.guide.rule3"), left + 18, top + 308, 0xFFB9C2CC, false);
-        graphics.text(font, HardwareLabLanguage.text("gui.guide.rule4"), left + 18, top + 324, 0xFFB9C2CC, false);
+        graphics.fill(left + 18, top + 242, left + 746, top + 244, 0xFF2C343D);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.circuit_title"), left + 18, top + 256, 0xFFFFFFFF, true);
+
+        String[] circuit = {"LEVER", "INPUT", "WIRE", "NOT", "WIRE", "OUTPUT", "LAMP"};
+        int startX = left + 26;
+        int boxY = top + 278;
+        for (int i = 0; i < circuit.length; i++) {
+            int x = startX + i * 103;
+            graphics.fill(x, boxY, x + 78, boxY + 26, 0xFF202930);
+            graphics.fill(x, boxY, x + 78, boxY + 2, 0xFF4DE38B);
+            graphics.text(font, circuit[i], x + 8, boxY + 9, 0xFFFFFFFF, true);
+            if (i < circuit.length - 1) {
+                graphics.text(font, ">", x + 83, boxY + 8, 0xFF5A6772, true);
+            }
+        }
+
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.port_note"),
+                left + 18, top + 316, 0xFFB9C2CC, false);
+        graphics.text(font, HardwareLabLanguage.text("gui.guide.bus_note"),
+                left + 18, top + 332, 0xFF8F9AA5, false);
     }
 
     private void drawStep(GuiGraphicsExtractor graphics, int left, int y, String titleKey, String bodyKey) {
