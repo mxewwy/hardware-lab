@@ -17,6 +17,15 @@ public final class ModBlockEntities {
     public static final BlockEntityType<DFlipFlopBlockEntity> D_FLIP_FLOP =
             register("d_flip_flop", DFlipFlopBlockEntity::new, ModBlocks.D_FLIP_FLOP);
 
+    public static final BlockEntityType<DigitalBusBlockEntity> DIGITAL_BUS =
+            register("digital_bus", DigitalBusBlockEntity::new, ModBlocks.DIGITAL_BUS);
+
+    public static final BlockEntityType<BusMuxBlockEntity> BUS_MUX =
+            register("bus_mux", BusMuxBlockEntity::new, ModBlocks.BUS_MUX);
+
+    public static final BlockEntityType<BusSplitterBlockEntity> BUS_SPLITTER =
+            register("bus_splitter", BusSplitterBlockEntity::new, ModBlocks.BUS_SPLITTER);
+
     private ModBlockEntities() {
     }
 

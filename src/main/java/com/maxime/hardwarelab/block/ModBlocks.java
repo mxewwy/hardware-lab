@@ -75,6 +75,30 @@ public final class ModBlocks {
                     .sound(SoundType.METAL)
     );
 
+    public static final Block DIGITAL_BUS = register(
+            "digital_bus",
+            DigitalBusBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(1.5F)
+                    .sound(SoundType.METAL)
+    );
+
+    public static final Block BUS_MUX = register(
+            "bus_mux",
+            BusMuxBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(1.5F)
+                    .sound(SoundType.METAL)
+    );
+
+    public static final Block BUS_SPLITTER = register(
+            "bus_splitter",
+            BusSplitterBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(1.5F)
+                    .sound(SoundType.METAL)
+    );
+
     private ModBlocks() {
     }
 
@@ -110,6 +134,9 @@ public final class ModBlocks {
             entries.accept(CLOCK_GENERATOR.asItem());
             entries.accept(CLOCK_DIVIDER.asItem());
             entries.accept(D_FLIP_FLOP.asItem());
+            entries.accept(DIGITAL_BUS.asItem());
+            entries.accept(BUS_MUX.asItem());
+            entries.accept(BUS_SPLITTER.asItem());
         });
     }
 }

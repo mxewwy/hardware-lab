@@ -6,6 +6,9 @@
   "block.hardware_lab.clock_generator": "Clock Generator",
   "block.hardware_lab.clock_divider": "Clock Divider",
   "block.hardware_lab.d_flip_flop": "D Flip-Flop",
+  "block.hardware_lab.digital_bus": "Digital Bus",
+  "block.hardware_lab.bus_mux": "Bus MUX",
+  "block.hardware_lab.bus_splitter": "Bus Splitter",
   "item.hardware_lab.logic_probe": "Logic Probe",
   "item.hardware_lab.oscilloscope": "Oscilloscope"
 }
