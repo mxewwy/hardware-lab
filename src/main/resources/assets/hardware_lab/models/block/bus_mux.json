@@ -1,11 +1,11 @@
 {
-  "parent": "minecraft:block/cube",
+  "parent": "hardware_lab:block/bus",
   "textures": {
-    "down": "minecraft:block/orange_concrete",
-    "up": "minecraft:block/orange_concrete",
-    "north": "minecraft:block/observer_front",
-    "south": "minecraft:block/orange_concrete",
-    "west": "minecraft:block/orange_concrete",
-    "east": "minecraft:block/orange_concrete"
+    "down": "hardware_lab:block/bus",
+    "up": "hardware_lab:block/bus",
+    "north": "hardware_lab:block/bus",
+    "south": "hardware_lab:block/bus",
+    "west": "hardware_lab:block/bus",
+    "east": "hardware_lab:block/bus"
   }
 }
