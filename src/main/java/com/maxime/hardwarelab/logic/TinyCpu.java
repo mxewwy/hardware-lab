@@ -149,10 +149,11 @@ public final class TinyCpu {
             }
             case 3 -> {
                 put(0x00, 0x10, 0xAA);
-                put(0x02, 0x40);
-                put(0x03, 0x30);
+                put(0x02, 0x11, 0xFF);
                 put(0x04, 0x40);
-                put(0x05, 0x60, 0x02);
+                put(0x05, 0x30);
+                put(0x06, 0x40);
+                put(0x07, 0x60, 0x04);
             }
             default -> throw new AssertionError();
         }
