@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.logic.GateType;
 import com.maxime.hardwarelab.logic.Signal;
 import com.mojang.serialization.MapCodec;
@@ -66,7 +67,7 @@ public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
         }
 
         if (level.isClientSide()) {
-            player.sendOverlayMessage(Component.literal("Logic Gate: " + next.displayName()));
+            player.sendOverlayMessage(Component.literal(HardwareLabLanguage.blockName("universal_logic_gate") + ": " + next.displayName()));
         }
 
         return InteractionResult.SUCCESS;
