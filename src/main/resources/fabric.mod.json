@@ -8,7 +8,8 @@
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
-    "main": ["com.maxime.hardwarelab.HardwareLab"]
+    "main": ["com.maxime.hardwarelab.HardwareLab"],
+    "client": ["com.maxime.hardwarelab.client.HardwareLabClient"]
   },
   "depends": {
     "fabricloader": ">=0.19.5",
