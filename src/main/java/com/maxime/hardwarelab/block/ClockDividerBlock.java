@@ -22,6 +22,8 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public class ClockDividerBlock extends BaseEntityBlock {
     public static final MapCodec<ClockDividerBlock> CODEC = simpleCodec(ClockDividerBlock::new);
+    public static final net.minecraft.world.level.block.state.properties.EnumProperty<Direction> FACING =
+            HorizontalDirectionalBlock.FACING;
 
     public ClockDividerBlock(Properties properties) {
         super(properties);
