@@ -10,7 +10,7 @@ public final class BusMuxLogic {
             Signal select,
             BusWidth width
     ) {
-        BusSignal selected = select.value() ? inputB : inputA;
+        BusSignal selected = select.value() != 0 ? inputB : inputA;
         return selected == null
                 ? BusSignal.zero(width)
                 : selected.resized(width);
