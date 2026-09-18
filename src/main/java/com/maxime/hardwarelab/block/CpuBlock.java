@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.block.entity.CpuBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.BusSignal;
@@ -86,7 +87,7 @@ public final class CpuBlock extends BaseEntityBlock implements BusOutputBlock {
         }
 
         player.sendOverlayMessage(Component.literal(
-                "8-bit CPU | PROGRAM=" + entity.cpu().programId()
+                HardwareLabLanguage.blockName("cpu") + " | PROGRAM=" + entity.cpu().programId()
                         + " | A=0x" + String.format("%02X", entity.cpu().a())
                         + " | B=0x" + String.format("%02X", entity.cpu().b())
                         + " | PC=0x" + String.format("%02X", entity.cpu().pc())
