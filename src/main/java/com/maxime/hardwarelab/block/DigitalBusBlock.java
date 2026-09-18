@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.block;
 
+import com.maxime.hardwarelab.HardwareLabLanguage;
 import com.maxime.hardwarelab.block.entity.DigitalBusBlockEntity;
 import com.maxime.hardwarelab.block.entity.ModBlockEntities;
 import com.maxime.hardwarelab.logic.BusSignal;
@@ -78,7 +79,7 @@ public class DigitalBusBlock extends BaseEntityBlock implements BusOutputBlock {
         }
 
         player.sendOverlayMessage(Component.literal(
-                "Digital Bus | WIDTH=" + entity.width().bits()
+                HardwareLabLanguage.blockName("digital_bus") + " | WIDTH=" + entity.width().bits()
                         + " | VALUE=0x" + entity.manualSignal().hex()
         ));
         level.updateNeighborsAt(pos, this);
