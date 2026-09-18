@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import com.maxime.hardwarelab.item.HardwareBlockItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -70,7 +71,7 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
         ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
         Registry.register(BuiltInRegistries.ITEM, itemKey,
-                new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));
+                new HardwareBlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix(), "block." + name));
         return block;
     }
 
