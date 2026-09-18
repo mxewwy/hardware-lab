@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "hardware_lab",
+  "version": "${version}",
+  "name": "Hardware Lab",
+  "description": "A digital electronics sandbox for Minecraft.",
+  "authors": ["Maxime"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.maxime.hardwarelab.HardwareLab"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
