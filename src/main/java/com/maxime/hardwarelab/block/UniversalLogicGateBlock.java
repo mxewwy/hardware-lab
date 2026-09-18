@@ -15,7 +15,9 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Nullable;
 
 public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
     public static final EnumProperty<GateType> GATE_TYPE =
@@ -99,16 +101,11 @@ public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
             Level level,
             BlockPos pos,
             Block block,
-            BlockPos neighborPos,
+            @Nullable Orientation orientation,
             boolean movedByPiston
     ) {
-        super.neighborChanged(state, level, pos, block, neighborPos, movedByPiston);
-
-        Direction facing = state.getValue(FACING);
-        if (neighborPos.equals(pos.relative(facing.getClockWise()))
-                || neighborPos.equals(pos.relative(facing.getCounterClockWise()))) {
-            notifyOutputNeighbors(level, pos, facing);
-        }
+        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
+        notifyOutputNeighbors(level, pos, state.getValue(FACING));
     }
 
     private static Signal evaluate(BlockState state, BlockGetter level, BlockPos pos) {
@@ -123,7 +120,8 @@ public class UniversalLogicGateBlock extends HorizontalDirectionalBlock {
     }
 
     private static Signal readSignal(BlockGetter level, BlockPos sourcePos, Direction towardGate) {
-        return Signal.of(level.getSignal(sourcePos, towardGate) > 0);
+        BlockState sourceState = level.getBlockState(sourcePos);
+        return Signal.of(sourceState.getSignal(level, sourcePos, towardGate) > 0);
     }
 
     private static void notifyOutputNeighbors(Level level, BlockPos pos, Direction facing) {
