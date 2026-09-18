@@ -135,6 +135,11 @@ public class BusMuxBlock extends BaseEntityBlock implements BusOutputBlock {
     }
 
     @Override
+    public Direction getBusOutputDirection(BlockState state) {
+        return state.getValue(FACING);
+    }
+
+    @Override
     public boolean isSignalSource(BlockState state) {
         return true;
     }
