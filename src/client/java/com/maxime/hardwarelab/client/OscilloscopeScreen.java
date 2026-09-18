@@ -1,5 +1,6 @@
 package com.maxime.hardwarelab.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -47,6 +48,15 @@ public final class OscilloscopeScreen extends Screen {
     }
 
     @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == InputConstants.KEY_R) {
+            this.clearSamples();
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
     public void extractRenderState(
             GuiGraphicsExtractor graphics,
             int mouseX,
@@ -55,50 +65,26 @@ public final class OscilloscopeScreen extends Screen {
     ) {
         super.extractRenderState(graphics, mouseX, mouseY, delta);
 
-        int left = 28;
-        int top = 28;
-        int right = this.width - 28;
-        int bottom = this.height - 28;
+        int left = 22;
+        int top = 20;
+        int right = this.width - 22;
+        int bottom = this.height - 20;
 
-        graphics.fill(left, top, right, bottom, 0xE6101317);
-        graphics.fill(left + 10, top + 10, right - 10, top + 11, 0xFF2C343D);
-        graphics.fill(left + 10, bottom - 11, right - 10, bottom - 10, 0xFF2C343D);
+        graphics.fill(0, 0, this.width, this.height, 0xB80B0E12);
+        graphics.fill(left, top, right, bottom, 0xF013171C);
+        graphics.fill(left, top, right, top + 2, 0xFF4DE38B);
 
-        graphics.text(
-                this.font,
-                "HARDWARE LAB // OSCILLOSCOPE",
-                left + 16,
-                top + 16,
-                0xFFFFFFFF,
-                true
-        );
+        graphics.text(this.font, "HARDWARE LAB // OSCILLOSCOPE", left + 16, top + 14, 0xFFFFFFFF, true);
+        graphics.text(this.font, "SOURCE  " + this.getTargetName(), left + 16, top + 31, 0xFFB9C2CC, false);
+        graphics.text(this.font, "FACE  " + this.targetFace.getName().toUpperCase(), left + 16, top + 43, 0xFF7F8B96, false);
 
-        String targetName = this.getTargetName();
-        graphics.text(
-                this.font,
-                "SOURCE  " + targetName,
-                left + 16,
-                top + 32,
-                0xFFB9C2CC,
-                false
-        );
-
-        graphics.text(
-                this.font,
-                "FACE  " + this.targetFace.getName().toUpperCase(),
-                left + 16,
-                top + 44,
-                0xFF7F8B96,
-                false
-        );
-
-        int graphLeft = left + 18;
-        int graphTop = top + 70;
-        int graphRight = right - 18;
-        int graphBottom = bottom - 58;
+        int graphLeft = left + 16;
+        int graphTop = top + 62;
+        int graphRight = right - 16;
+        int graphBottom = bottom - 65;
         int mid = (graphTop + graphBottom) / 2;
 
-        graphics.fill(graphLeft, graphTop, graphRight, graphBottom, 0xFF0A0C0F);
+        graphics.fill(graphLeft, graphTop, graphRight, graphBottom, 0xFF090B0E);
 
         for (int y = graphTop + 20; y < graphBottom; y += 20) {
             graphics.fill(graphLeft, y, graphRight, y + 1, 0xFF171C21);
@@ -108,7 +94,7 @@ public final class OscilloscopeScreen extends Screen {
             graphics.fill(x, graphTop, x + 1, graphBottom, 0xFF171C21);
         }
 
-        graphics.fill(graphLeft, mid, graphRight, mid + 1, 0xFF2E3943);
+        graphics.fill(graphLeft, mid, graphRight, mid + 1, 0xFF36424E);
 
         if (this.sampleCount > 1) {
             int availableWidth = graphRight - graphLeft - 4;
@@ -126,41 +112,17 @@ public final class OscilloscopeScreen extends Screen {
             }
         }
 
-        graphics.text(
-                this.font,
-                "SIGNAL",
-                left + 16,
-                bottom - 40,
-                0xFF7F8B96,
-                false
-        );
-
+        graphics.text(this.font, "LIVE SIGNAL", left + 16, bottom - 47, 0xFF7F8B96, false);
         graphics.text(
                 this.font,
                 this.currentSignal > 0 ? "HIGH" : "LOW",
-                left + 66,
-                bottom - 40,
+                left + 92,
+                bottom - 47,
                 this.currentSignal > 0 ? 0xFF4DE38B : 0xFF88929D,
                 true
         );
-
-        graphics.text(
-                this.font,
-                "POWER " + this.currentSignal + "/15",
-                left + 16,
-                bottom - 25,
-                0xFF7F8B96,
-                false
-        );
-
-        graphics.text(
-                this.font,
-                "ESC  CLOSE",
-                right - 92,
-                bottom - 25,
-                0xFF7F8B96,
-                false
-        );
+        graphics.text(this.font, "POWER " + this.currentSignal + "/15", left + 16, bottom - 30, 0xFFB9C2CC, false);
+        graphics.text(this.font, "R  RESET   ESC  CLOSE", right - 142, bottom - 30, 0xFF7F8B96, false);
     }
 
     private String getTargetName() {
@@ -168,7 +130,6 @@ public final class OscilloscopeScreen extends Screen {
         if (level == null) {
             return "UNKNOWN";
         }
-
         return level.getBlockState(this.targetPos).getBlock().getName().getString();
     }
 
@@ -176,7 +137,6 @@ public final class OscilloscopeScreen extends Screen {
         for (int i = 0; i < this.samples.length; i++) {
             this.samples[i] = false;
         }
-
         this.sampleIndex = 0;
         this.sampleCount = 0;
         this.currentSignal = 0;
